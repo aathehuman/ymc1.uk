@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prayer Times | Yardley Muslim Centre</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicons/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<nav class="navbar"></nav>
+<section class="page-header"><div class="container"><h1>Prayer Times</h1><p>Establish prayer at the decline of the sun till the darkness of the night. (Qur'an 17:78)</p></div></section>
+<section class="section"><div class="container"><div class="prayer-hero-info"><div class="prayer-combined-box"><div class="clock-info"><div class="hero-clock" id="clock">--:--<span class="seconds">:--</span></div><div class="hero-date" id="gregorian-date">Loading date...</div><div class="hero-hijri" id="hijri-date">Loading Hijri date...</div></div><div class="divider"></div><div class="next-prayer-info"><span class="next-label">Next Prayer:</span><span class="next-name" id="next-prayer-name">--</span><span class="next-time" id="next-prayer-time">--:--</span><span class="next-countdown" id="next-prayer-countdown">--:--:--</span></div></div></div><div id="timetable-download-area" style="padding:20px;background:var(--bg-primary);border-radius:12px"><h2 class="section-title" style="margin-bottom:5px">Monthly Timetable</h2><p class="section-subtitle" id="current-month">Yardley Muslim Centre - Birmingham</p><div style="display:flex;justify-content:center;margin:0 0 24px"><a class="btn-outline" href="/assets/timetable-images/current-timetable.jpg" download="YMC-Timetable.jpg" rel="noopener noreferrer"><i class="fa-solid fa-download" aria-hidden="true"></i> Download Timetable Image</a></div><div class="timetable-wrapper"><table class="timetable" id="timetable"><thead><tr><th>Date</th><th>Fajr</th><th>Sunrise</th><th>Dhuhr</th><th>Asr</th><th>Maghrib</th><th>Isha</th></tr></thead><tbody id="timetable-body"></tbody></table></div></div></div></section>
+<footer class="footer"></footer><script src="script.js"></script><script src="/hijri-compat.js"></script><script src="/timetable-weekday.js"></script></body>
+</html>

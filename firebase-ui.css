@@ -1,0 +1,96 @@
+.firebase-status{max-width:900px;margin:18px auto;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--bg-card);font-size:.95rem}.firebase-status[data-status="error"]{border-color:#ff6b6b}.firebase-status[data-status="success"]{border-color:var(--green-bright)}.firebase-announcements{display:grid;gap:12px;margin:0 auto;padding-top:22px;padding-bottom:6px;max-width:1100px}.firebase-notice{padding:16px 18px;border:1px solid var(--border);border-left:4px solid var(--green-bright);border-radius:10px;background:var(--bg-card)}.firebase-notice-title{display:block;margin-bottom:4px}.firebase-notice-message{margin:0}.firebase-notice-link,.firebase-event-link{display:inline-block;margin-top:8px;font-weight:700}.qa-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:30px;align-items:start}.qa-panel{padding:26px;border:1px solid var(--border);border-radius:14px;background:var(--bg-card)}.qa-panel h2{margin-top:0}.qa-form{display:grid;gap:16px}.qa-form label{display:grid;gap:7px;font-weight:700}.qa-form input,.qa-form textarea,.qa-form select{width:100%;padding:12px 13px;border:1px solid var(--border);border-radius:8px;background:var(--bg-primary);color:inherit;font:inherit}.qa-form textarea{min-height:150px;resize:vertical}.qa-checkbox{display:flex!important;grid-template-columns:auto 1fr!important;align-items:center;gap:10px!important;font-weight:500!important}.qa-checkbox input{width:auto}.qa-result{min-height:24px;margin:0}.qa-result[data-status="error"]{color:#ff8c8c}.qa-result[data-status="success"]{color:var(--green-bright)}.qa-list{display:grid;gap:15px}.qa-card{padding:18px;border:1px solid var(--border);border-radius:10px;background:var(--bg-card-alt)}.qa-card h3{margin:0 0 8px;font-size:1.05rem}.qa-card p{margin:0}.firebase-empty{opacity:.72}.admin-shell{min-height:100vh;background:var(--bg-primary);padding:36px 18px}.admin-container{width:min(1100px,100%);margin:auto}.admin-header{display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:24px}.admin-card{padding:24px;border:1px solid var(--border);border-radius:14px;background:var(--bg-card);margin-bottom:22px}.admin-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}.admin-form{display:grid;gap:13px}.admin-form label{display:grid;gap:6px;font-weight:700}.admin-form input,.admin-form textarea,.admin-form select{width:100%;padding:11px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg-primary);color:inherit;font:inherit}.admin-form textarea{min-height:110px;resize:vertical}.admin-actions{display:flex;gap:10px;flex-wrap:wrap}.admin-list{display:grid;gap:10px}.admin-item{padding:14px;border:1px solid var(--border);border-radius:9px}.admin-item-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}.admin-item-copy{min-width:0;flex:1}.admin-item h3{margin:0;font-size:1rem}.admin-item p{margin:6px 0 0}.admin-item-meta-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px}.admin-meta{font-size:.85rem;opacity:.7}.admin-item-actions{display:flex;gap:8px;flex:0 0 auto}.admin-edit,.admin-secondary,.admin-danger{border:0;border-radius:7px;padding:8px 10px;cursor:pointer;font:inherit;font-weight:700}.admin-edit{background:var(--blue);color:#07131c}.admin-edit:hover,.admin-edit:focus-visible{background:var(--blue-bright)}.admin-secondary{background:transparent;color:var(--text-secondary);border:1px solid var(--border)}.admin-secondary:hover,.admin-secondary:focus-visible{color:var(--gold-bright);border-color:var(--gold)}.admin-danger{background:#b42318;color:#fff}.admin-status-badge{display:inline-flex;align-items:center;border-radius:999px;padding:3px 8px;font-size:.74rem;font-weight:800;line-height:1.2}.admin-status-badge.is-active{background:rgba(61,189,104,.14);color:var(--green-bright);border:1px solid rgba(61,189,104,.32)}.admin-status-badge.is-inactive{background:rgba(180,190,200,.08);color:var(--text-secondary);border:1px solid rgba(180,190,200,.22)}.admin-login{width:min(460px,100%);margin:8vh auto}.hidden{display:none!important}.visually-hidden{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}@media(max-width:800px){.qa-layout,.admin-grid{grid-template-columns:1fr}.admin-header{align-items:flex-start;flex-direction:column}}
+
+/* Native controls and compact mobile admin fixes */
+.qa-form select,
+.admin-form input,
+.admin-form select,
+.admin-form textarea {
+  min-width: 0;
+  color-scheme: dark;
+}
+
+.qa-form select option,
+.admin-form select option {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.admin-form select,
+.admin-form input[type="date"],
+.admin-form input[type="time"],
+.admin-form input[type="datetime-local"] {
+  appearance: auto;
+  -webkit-appearance: auto;
+}
+
+.admin-form input::-webkit-calendar-picker-indicator {
+  filter: invert(1) brightness(.9);
+  opacity: .85;
+  cursor: pointer;
+}
+
+.admin-form .qa-checkbox {
+  display: flex !important;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  min-width: 0;
+  gap: .7rem !important;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.admin-form .qa-checkbox input[type="checkbox"] {
+  flex: 0 0 auto;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0;
+  accent-color: var(--green-bright);
+}
+
+.admin-application-details {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.admin-application-detail {
+  margin: 0 !important;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.5;
+}
+
+.admin-application-detail strong {
+  color: var(--gold-bright);
+}
+
+@media (max-width: 600px) {
+  .admin-shell {
+    padding-inline: 10px;
+  }
+
+  .admin-card,
+  .qa-panel {
+    padding: 18px 14px;
+  }
+
+  .admin-form .admin-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 13px;
+  }
+
+  .admin-item-top {
+    flex-direction: column;
+  }
+
+  .admin-item-actions {
+    width: 100%;
+  }
+
+  .admin-item-actions button {
+    flex: 1;
+  }
+}
