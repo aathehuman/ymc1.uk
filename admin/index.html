@@ -1,1 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YMC Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/firebase-ui.css">
+  
+</head>
+<body>
+  <main class="admin-shell">
+    <section class="admin-card admin-login" data-login-panel>
+      <p class="eyebrow">Yardley Muslim Centre</p>
+      <h1>Admin sign in</h1>
+      <p>Only approved Firebase accounts can manage public content.</p>
+      <form class="admin-form" data-login-form>
+        <label>Email<input type="email" name="email" autocomplete="email" required></label>
+        <label>Password<input type="password" name="password" autocomplete="current-password" required></label>
+        <button class="btn-donate" type="submit">Sign In</button>
+        <p data-login-result aria-live="polite"></p>
+      </form>
+    </section>
 
+    <section class="admin-container hidden" data-admin-panel>
+      <header class="admin-header">
+        <div>
+          <p class="eyebrow">YMC Firebase</p>
+          <h1>Content admin</h1>
+          <p data-admin-user></p>
+        </div>
+        <div class="admin-actions">
+          <a class="btn-outline" href="/">View Website</a>
+          <button class="btn-donate" type="button" data-sign-out>Sign Out</button>
+        </div>
+      </header>
+
+      <p class="firebase-status" data-admin-status aria-live="polite"></p>
+
+      <div class="admin-grid">
+        <section class="admin-card">
+          <h2>Add event</h2>
+          <form class="admin-form" data-event-form>
+            <label>Type
+              <select name="type">
+                <option value="special">Special event</option>
+                <option value="regular">Regular event</option>
+              </select>
+            </label>
+            <label>Title<input name="title" maxlength="120" required></label>
+            <label>Description<textarea name="description" maxlength="1200" required></textarea></label>
+            <label>Date and time<input type="datetime-local" name="startAt"></label>
+            <div class="admin-grid">
+              <label>Badge top<input name="badgeTop" maxlength="12" placeholder="Every"></label>
+              <label>Badge bottom<input name="badgeBottom" maxlength="12" placeholder="Fri"></label>
+            </div>
+            <label>Optional link<input type="url" name="linkUrl" placeholder="https://..."></label>
+            <label>Link label<input name="linkLabel" maxlength="50" placeholder="Register"></label>
+            <label class="qa-checkbox"><input type="checkbox" name="published" checked><span>Publish immediately</span></label>
+            <button class="btn-donate" type="submit">Save Event</button>
+          </form>
+        </section>
+
+        <section class="admin-card">
+          <h2>Add announcement</h2>
+          <form class="admin-form" data-announcement-form>
+            <label>Title<input name="title" maxlength="100" required></label>
+            <label>Message<textarea name="message" maxlength="600" required></textarea></label>
+            <label>Priority<input type="number" name="priority" value="0" min="0" max="10"></label>
+            <label>Optional expiry<input type="datetime-local" name="expiresAt"></label>
+            <label>Optional link<input type="url" name="linkUrl" placeholder="https://..."></label>
+            <label>Link label<input name="linkLabel" maxlength="50" placeholder="Read more"></label>
+            <label class="qa-checkbox"><input type="checkbox" name="active" checked><span>Active</span></label>
+            <button class="btn-donate" type="submit">Save Announcement</button>
+          </form>
+        </section>
+      </div>
+
+      <div class="admin-grid">
+        <section class="admin-card">
+          <h2>Events</h2>
+          <div class="admin-list" data-event-list></div>
+        </section>
+        <section class="admin-card">
+          <h2>Announcements</h2>
+          <div class="admin-list" data-announcement-list></div>
+        </section>
+      </div>
+
+      <section class="admin-card">
+        <h2>Youth applications</h2>
+        <p>Applications contain private contact details. Only use them to review the application and contact the applicant or parent/guardian.</p>
+        <div class="admin-list" data-youth-application-list></div>
+      </section>
+
+      <section class="admin-card">
+        <h2>Submitted questions</h2>
+        <p>Review each question before writing and publishing an approved answer.</p>
+        <div class="admin-list" data-question-list></div>
+      </section>
+    </section>
+  </main>
+  <script type="module" src="/admin/admin.js"></script>
+  <script type="module" src="/admin/youth-applications.js"></script>
+</body>
+</html>
