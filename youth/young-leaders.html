@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Become a Young Leader | Yardley Muslim Centre</title>
+  <meta name="description" content="Apply to develop leadership skills and support youth activities at Yardley Muslim Centre.">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicons/favicon-32x32.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/firebase-ui.css">
+</head>
+<body>
+  <nav class="navbar"></nav>
+
+  <section class="page-header service-page-header">
+    <div class="container">
+      <a class="service-back-link" href="/youth/"><i class="fas fa-arrow-left" aria-hidden="true"></i> Youth at YMC</a>
+      <div class="service-header-icon"><i class="fa-solid fa-people-group" aria-hidden="true"></i></div>
+      <h1>Become a Young Leader</h1>
+      <p>Build confidence, serve the community and help younger people feel welcome at YMC.</p>
+    </div>
+  </section>
+
+  <main class="section">
+    <div class="container qa-layout">
+      <section class="qa-panel">
+        <h2>What young leaders may do</h2>
+        <p>Young Leaders may help trusted adult organisers with suitable youth activities and community projects. Opportunities will depend on the programme, safeguarding arrangements and each applicant's readiness.</p>
+
+        <div class="service-info-grid" style="margin-top:20px">
+          <article class="service-info-card"><i class="fa-solid fa-clipboard-check" aria-hidden="true"></i><h3>Support activities</h3><p>Help organise sessions, welcome participants and keep group activities running smoothly.</p></article>
+          <article class="service-info-card"><i class="fa-solid fa-handshake-angle" aria-hidden="true"></i><h3>Serve the community</h3><p>Assist with events, volunteering, fundraising and practical projects when appropriate.</p></article>
+          <article class="service-info-card"><i class="fa-solid fa-comments" aria-hidden="true"></i><h3>Build confidence</h3><p>Develop communication, teamwork, responsibility and problem-solving skills.</p></article>
+          <article class="service-info-card"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><h3>Work safely</h3><p>Follow adult supervision, safeguarding guidance and the mosque's code of conduct.</p></article>
+        </div>
+
+        <div class="guide-note" style="margin-top:20px">
+          <strong>Please note:</strong> Applying does not guarantee a place or permission to lead a group independently. Applicants may be invited for a conversation, training and a supervised trial. Under-18s require parent or guardian involvement.
+        </div>
+      </section>
+
+      <section class="qa-panel">
+        <h2>Young Leader application</h2>
+        <p>Please give brief, honest answers. YMC will only use these details to review and respond to this application.</p>
+
+        <form class="qa-form" data-youth-application-form data-application-type="young-leader">
+          <label>Full name
+            <input type="text" name="fullName" maxlength="100" autocomplete="name" required>
+          </label>
+
+          <label>Age group
+            <select name="ageGroup" required>
+              <option value="">Select an age group</option>
+              <option value="13-15">13–15</option>
+              <option value="16-17">16–17</option>
+              <option value="18-plus">18 or over</option>
+            </select>
+          </label>
+
+          <label>Email address <span style="font-weight:400;opacity:.75">(optional for under-18s)</span>
+            <input type="email" name="email" maxlength="200" autocomplete="email">
+          </label>
+
+          <label>Phone number <span style="font-weight:400;opacity:.75">(optional)</span>
+            <input type="tel" name="phone" maxlength="40" autocomplete="tel">
+          </label>
+
+          <label>Parent or guardian name <span style="font-weight:400;opacity:.75">(required if under 18)</span>
+            <input type="text" name="guardianName" maxlength="100">
+          </label>
+
+          <label>Parent or guardian contact <span style="font-weight:400;opacity:.75">(required if under 18)</span>
+            <input type="text" name="guardianContact" maxlength="200" placeholder="Email address or phone number">
+          </label>
+
+          <label>Which areas would you most like to help with?
+            <textarea name="interests" maxlength="1000" placeholder="For example: youth activities, welcoming, sports, tech, media, events or volunteering."></textarea>
+          </label>
+
+          <label>Relevant experience <span style="font-weight:400;opacity:.75">(optional)</span>
+            <textarea name="experience" maxlength="1500" placeholder="This can include school responsibilities, volunteering, helping at the mosque or supporting younger people."></textarea>
+          </label>
+
+          <label>Why would you like to become a Young Leader?
+            <textarea name="motivation" minlength="20" maxlength="1500" required></textarea>
+          </label>
+
+          <label>Typical availability
+            <textarea name="availability" maxlength="600" placeholder="For example: weekday evenings, weekends or school holidays."></textarea>
+          </label>
+
+          <label class="qa-checkbox">
+            <input type="checkbox" name="consent" required>
+            <span>I confirm that these details may be used by YMC to review the application and contact me or my parent/guardian.</span>
+          </label>
+
+          <label class="visually-hidden">Website
+            <input type="text" name="website" tabindex="-1" autocomplete="off">
+          </label>
+
+          <button class="btn-donate" type="submit">Submit Application</button>
+          <p class="qa-result" data-form-result aria-live="polite"></p>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer"></footer>
+  <script src="/script.js"></script>
+  
+  <script type="module" src="/youth/applications.js"></script>
+</body>
+</html>
