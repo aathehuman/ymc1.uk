@@ -15,7 +15,6 @@ const NAV_ITEMS = [
   ["/resources/", "Resources", "resources"],
   ["/youth/", "Youth", "youth"],
   ["/about.html", "About", "about"]
-  ["/admin/", "Admin", "admin"]
 ];
 
 const ymcClockPartsFormatter = new Intl.DateTimeFormat("en-GB", {
