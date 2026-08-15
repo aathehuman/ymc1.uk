@@ -1,1 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YMC Dashboard</title>
+<style>
+@font-face {
+  font-family: "DMSerifDisplay";
+  src: url("/assets/fonts/DMSerifDisplay.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 
+:root {
+  --bg-primary: #08111f;
+  --bg-secondary: #0d1726;
+  --bg-card: #122031;
+  --bg-card-alt: #18283a;
+  --green: #3d8449;
+  --green-bright: #72bd68;
+  --green-deep: #245b32;
+  --blue: #3f89b2;
+  --blue-bright: #72afd0;
+  --blue-deep: #245b7a;
+  --gold: #d4af37;
+  --gold-bright: #efd06a;
+  --text-primary: #f3f1ea;
+  --text-secondary: #b4bec8;
+  --border: #29445a;
+  --error: #ff5f5f;
+  --font-sans: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  --font-serif: "DMSerifDisplay", Georgia, "Times New Roman", serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 8% 0%, rgba(63, 137, 178, 0.045), transparent 30rem),
+    radial-gradient(circle at 92% 28%, rgba(61, 132, 73, 0.045), transparent 28rem),
+    repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(63, 137, 178, 0.012) 35px, rgba(63, 137, 178, 0.012) 70px),
+    repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(61, 132, 73, 0.012) 35px, rgba(61, 132, 73, 0.012) 70px);
+  pointer-events: none;
+}
+
+.dashboard {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  gap: 12px;
+  width: 100vw;
+  height: 100vh;
+  padding: 16px;
+}
+
+.header,
+.prayer-panel,
+.slideshow-panel,
+.announcement-bar,
+.footer {
+  border: 1px solid var(--border);
+  background: linear-gradient(145deg, rgba(24, 40, 58, 0.82), rgba(18, 32, 49, 0.98));
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.14);
+}
+
+.header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 24px;
+  min-height: 104px;
+  padding: 12px 24px;
+  border-radius: 12px;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo {
+  width: 68px;
+  height: 68px;
+  object-fit: contain;
+}
+
+.mosque-name {
+  color: var(--gold-bright);
+  font-family: var(--font-serif);
+  font-size: clamp(38px, 3vw, 56px);
+  font-weight: 400;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+.time-section {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 24px;
+}
+
+.dates {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+}
+
+.date-item {
+  color: var(--text-primary);
+  font-family: var(--font-serif);
+  font-size: 28px;
+  line-height: 1.15;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.date-item.hijri {
+  color: var(--blue-bright);
+  font-size: 19px;
+}
+
+.clock {
+  color: var(--text-primary);
+  font-family: var(--font-serif);
+  font-size: 80px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 1px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.clock .seconds {
+  color: var(--green-bright);
+  font-size: 54px;
+}
+
+.clock .ampm {
+  margin-left: 8px;
+  color: var(--blue-bright);
+  font-family: var(--font-sans);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.main {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+  min-height: 0;
+}
+
+.prayer-panel {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 320px;
+  min-height: 0;
+  padding: 16px;
+  border-radius: 12px;
+}
+
+.panel-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  padding-bottom: 9px;
+  border-bottom: 2px solid var(--border);
+  color: var(--blue-bright);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.panel-title::before {
+  content: "";
+  width: 4px;
+  height: 17px;
+  border-radius: 999px;
+  background: var(--green-bright);
+}
+
+.prayer-header,
+.prayer-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 92px 100px;
+  align-items: center;
+  gap: 12px;
+}
+
+.prayer-header {
+  padding: 0 12px 7px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.prayer-header div:nth-child(2),
+.prayer-header div:nth-child(3) {
+  text-align: right;
+}
+
+.prayer-list {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 5px;
+  min-height: 0;
+}
+
+.prayer-row {
+  flex: 1;
+  min-height: 54px;
+  padding: 7px 12px;
+  border-left: 4px solid transparent;
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.prayer-row.active {
+  border-left-color: var(--green-bright);
+  background: rgba(61, 132, 73, 0.2);
+}
+
+.prayer-row.next {
+  border-left-color: var(--gold);
+  background: rgba(212, 175, 55, 0.1);
+}
+
+.prayer-name {
+  overflow: hidden;
+  color: var(--text-primary);
+  font-family: var(--font-serif);
+  font-size: 29px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.prayer-time,
+.prayer-jamaat {
+  text-align: right;
+  font-size: 24px;
+  font-variant-numeric: tabular-nums;
+}
+
+.prayer-time {
+  color: var(--blue-bright);
+}
+
+.prayer-jamaat {
+  color: var(--green-bright);
+  font-weight: 700;
+}
+
+.countdown {
+  margin-top: 9px;
+  padding: 9px 12px;
+  border: 1px solid rgba(212, 175, 55, 0.32);
+  border-radius: 8px;
+  background: rgba(212, 175, 55, 0.08);
+  text-align: center;
+}
+
+.countdown-label {
+  color: var(--gold-bright);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.countdown-time {
+  margin-top: 1px;
+  color: var(--text-primary);
+  font-family: var(--font-serif);
+  font-size: 52px;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  line-height: 1.05;
+}
+
+.countdown-name {
+  margin-top: 3px;
+  color: var(--blue-bright);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.qr-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 2px solid var(--border);
+}
+
+.qr-card {
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-card-alt);
+  text-align: center;
+}
+
+.qr-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 4px;
+  overflow: hidden;
+  padding: 4px;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.qr-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.qr-label {
+  color: var(--blue-bright);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.qr-sublabel {
+  margin-top: 1px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.slideshow-panel {
+  position: relative;
+  flex: 0 0 auto;
+  height: 100%;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 12px;
+  aspect-ratio: 16 / 9;
+}
+
+.slideshow,
+.slide {
+  width: 100%;
+  height: 100%;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 1.1s ease-in-out;
+}
+
+.slide.active {
+  opacity: 1;
+}
+
+.slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: var(--bg-primary);
+}
+
+.slide-placeholder {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  background: linear-gradient(145deg, var(--bg-card-alt), var(--bg-secondary));
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.slide-placeholder h2 {
+  margin-bottom: 8px;
+  color: var(--text-primary);
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 400;
+}
+
+.slide-placeholder p {
+  font-size: 15px;
+}
+
+.slideshow-indicators {
+  position: absolute;
+  z-index: 5;
+  bottom: 14px;
+  left: 50%;
+  display: flex;
+  gap: 7px;
+  transform: translateX(-50%);
+}
+
+.indicator {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.indicator.active {
+  background: var(--gold);
+  transform: scale(1.25);
+}
+
+.announcement-bar {
+  display: flex;
+  align-items: center;
+  min-height: 46px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: linear-gradient(90deg, var(--bg-card), var(--bg-card-alt), var(--bg-card));
+}
+
+.announcement-content {
+  position: relative;
+  flex: 1;
+  height: 30px;
+  overflow: hidden;
+  margin: 0 18px;
+}
+
+.announcement-text {
+  position: absolute;
+  inset: 0;
+  display: block;
+  overflow: visible;
+  color: var(--text-primary);
+  font-size: 17px;
+  font-weight: 550;
+  line-height: 30px;
+  opacity: 0;
+  text-align: center;
+  white-space: nowrap;
+  transform: translateY(5px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.announcement-text.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.announcement-text.is-long {
+  right: auto;
+  left: 100%;
+  width: max-content;
+  min-width: max-content;
+  text-align: left;
+  animation: announcement-scroll var(--announcement-duration, 13s) linear 0.8s forwards;
+}
+
+@keyframes announcement-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(-100% - 36px)); }
+}
+
+.footer {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.35fr 0.9fr 1.25fr 1fr;
+  align-items: center;
+  gap: 14px;
+  min-height: 58px;
+  padding: 9px 20px;
+  border-radius: 8px;
+}
+
+.footer-item {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 9px;
+}
+
+.footer-icon {
+  flex: 0 0 auto;
+  color: var(--gold);
+  font-size: 18px;
+}
+
+.footer-value {
+  overflow: hidden;
+  color: var(--text-primary);
+  font-size: 16px;
+  font-weight: 550;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.status-indicator {
+  position: absolute;
+  top: 50%;
+  right: 9px;
+  transform: translateY(-50%);
+}
+
+#error-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--green-bright);
+  box-shadow: 0 0 6px rgba(114, 189, 104, 0.65);
+}
+
+#error-dot.has-error {
+  background: var(--error);
+  box-shadow: 0 0 8px rgba(255, 95, 95, 0.8);
+  animation: blink 1.5s ease-in-out infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0.3; }
+}
+
+#error-tooltip {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 12px);
+  width: 420px;
+  max-height: 480px;
+  overflow-y: auto;
+  visibility: hidden;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--bg-card-alt);
+  color: var(--text-primary);
+  font-family: monospace;
+  font-size: 12px;
+  opacity: 0;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+  transition: opacity 0.2s;
+}
+
+.status-indicator:hover #error-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+#prayer-mode-overlay {
+  position: fixed;
+  z-index: 99999;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  visibility: hidden;
+  background: #000;
+  opacity: 0;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+#prayer-mode-overlay.active {
+  visibility: visible;
+  opacity: 1;
+}
+
+.prayer-mode-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 38px;
+}
+
+.prayer-mode-name,
+.prayer-mode-time {
+  color: #fff;
+  font-family: var(--font-serif);
+  line-height: 1;
+  text-align: center;
+}
+
+.prayer-mode-name {
+  font-size: 120px;
+  letter-spacing: 4px;
+}
+
+.prayer-mode-time {
+  font-size: 200px;
+  font-variant-numeric: tabular-nums;
+}
+
+.hide-cursor,
+.hide-cursor * {
+  cursor: none !important;
+}
+</style>
+</head>
+<body>
+<div class="dashboard">
+  <header class="header">
+    <div class="logo-section">
+      <img class="logo" src="/assets/logos/edited-logo-notext.png" alt="">
+      <h1 class="mosque-name">Yardley Muslim Centre.</h1>
+    </div>
+    <div></div>
+    <div class="time-section">
+      <div class="dates">
+        <div class="date-item" id="gregorian-date">--</div>
+        <div class="date-item hijri" id="hijri-date">--</div>
+      </div>
+      <div class="clock" id="clock">--:--<span class="seconds">:--</span></div>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="prayer-panel">
+      <h2 class="panel-title">Prayer Times</h2>
+      <div class="prayer-header">
+        <div>Prayer</div>
+        <div>Start</div>
+        <div>Jamaat</div>
+      </div>
+      <div class="prayer-list" id="prayer-list"></div>
+
+      <div class="countdown">
+        <div class="countdown-label">Next Jamaat In</div>
+        <div class="countdown-time" id="countdown-time">--:--:--</div>
+        <div class="countdown-name" id="countdown-name">--</div>
+      </div>
+
+      <div class="qr-section">
+        <div class="qr-card">
+          <div class="qr-image"><img src="/assets/qr-codes/launchgood.png" alt="Donate QR code"></div>
+          <div class="qr-label">Donate</div>
+          <div class="qr-sublabel">Support your local mosque.</div>
+        </div>
+        <div class="qr-card">
+          <div class="qr-image"><img src="/assets/qr-codes/website.png" alt="Website QR code"></div>
+          <div class="qr-label">Website</div>
+          <div class="qr-sublabel">Get our info on the go.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slideshow-panel">
+      <div class="slideshow" id="slideshow">
+        <div class="slide active">
+          <div class="slide-placeholder">
+            <h2>No adverts were found</h2>
+            <p>Add images to the configured advert paths.</p>
+          </div>
+        </div>
+      </div>
+      <div class="slideshow-indicators" id="indicators"></div>
+    </section>
+  </main>
+
+  <div class="announcement-bar">
+    <div class="announcement-content">
+      <div class="announcement-text" id="announcement-text"></div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-item"><span class="footer-icon">●</span><span class="footer-value" id="footer-address">--</span></div>
+    <div class="footer-item"><span class="footer-icon">●</span><span class="footer-value" id="footer-phone">--</span></div>
+    <div class="footer-item"><span class="footer-icon">●</span><span class="footer-value" id="footer-email">--</span></div>
+    <div class="footer-item"><span class="footer-icon">●</span><span class="footer-value" id="footer-website">--</span></div>
+    <div class="status-indicator">
+      <div id="error-tooltip">No errors. System running normally.</div>
+      <div id="error-dot"></div>
+    </div>
+  </footer>
+</div>
+
+<div id="prayer-mode-overlay">
+  <div class="prayer-mode-content">
+    <div class="prayer-mode-name" id="prayer-mode-name">PRAYER TIME.</div>
+    <div class="prayer-mode-time" id="prayer-mode-time">--:--</div>
+  </div>
+</div>
+
+<script type="module">
+import { PRAYER_DATA } from "/prayer-data.js";
+
+const TIME_ZONE = "Europe/London";
+const CONFIG = {
+  adverts: [
+    "/assets/adverts/1.jpg",
+    "/assets/adverts/2.jpg",
+    "/assets/adverts/3.jpg",
+    "/assets/adverts/4.jpg",
+    "/assets/adverts/5.jpg",
+    "/assets/adverts/6.jpg",
+    "/assets/adverts/7.jpg",
+    "/assets/adverts/8.jpg",
+    "/assets/adverts/9.jpg",
+    "/assets/adverts/10.jpg"
+  ],
+  slideDuration: 10000,
+  announcementDuration: 10000,
+  announcements: "Assalamu Alaykum. Welcome to Yardley Muslim Centre — Building Faith, Strengthening Community, Inspiring Futures. • Jumu'ah khutbah starts at 1:00 PM, with namaaz starting at 1:30 PM. • Enrol your child in Qur'an classes: speak to a volunteer or contact us by email or phone. • Please support the mosque through donations: scan the QR code or use the card machine. • Keep track of community events through our website. • Follow us on social media for more updates.",
+  contact: {
+    address: "47–51 Stoney Lane, Yardley, Birmingham, B25 8RE",
+    phone: "07588 475739",
+    email: "salam@yardleymuslimcentre.co.uk",
+    website: "yardleymuslimcentre.co.uk"
+  }
+};
+
+const clockFormatter = new Intl.DateTimeFormat("en-GB", {
+  timeZone: TIME_ZONE,
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit",
+  hourCycle: "h23"
+});
+
+const dateFormatter = new Intl.DateTimeFormat("en-GB", {
+  timeZone: TIME_ZONE,
+  weekday: "long",
+  day: "numeric",
+  month: "long",
+  year: "numeric"
+});
+
+let dailyPrayers = [];
+let loadedDateKey = "";
+let currentSlide = 0;
+let slideElements = [];
+let slideTimer = null;
+let prayerModeActive = false;
+let cursorTimer = null;
+let announcementTimer = null;
+let announcementIndex = 0;
+const errors = [];
+
+function londonParts(date = new Date()) {
+  const parts = {};
+  clockFormatter.formatToParts(date).forEach(part => {
+    if (part.type !== "literal") parts[part.type] = Number(part.value);
+  });
+
+  new Intl.DateTimeFormat("en-GB", {
+    timeZone: TIME_ZONE,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  }).formatToParts(date).forEach(part => {
+    if (part.type !== "literal") parts[part.type] = Number(part.value);
+  });
+
+  return parts;
+}
+
+function dateKey(date = new Date()) {
+  const parts = londonParts(date);
+  return `${parts.year}-${String(parts.month).padStart(2, "0")}-${String(parts.day).padStart(2, "0")}`;
+}
+
+function addDays(key, days) {
+  const [year, month, day] = key.split("-").map(Number);
+  return new Date(Date.UTC(year, month - 1, day + days, 12)).toISOString().slice(0, 10);
+}
+
+function timeToMinutes(time) {
+  if (!time || time === "—" || time === "--:--") return -1;
+  const [hours, minutes] = time.split(":").map(Number);
+  return hours * 60 + minutes;
+}
+
+function addError(message) {
+  if (errors.includes(message)) return;
+  errors.push(message);
+  updateErrorDot();
+}
+
+function updateErrorDot() {
+  const dot = document.getElementById("error-dot");
+  const tooltip = document.getElementById("error-tooltip");
+
+  if (errors.length) {
+    dot.classList.add("has-error");
+    tooltip.innerHTML = errors.map(error => `<div>• ${error}</div>`).join("");
+  } else {
+    dot.classList.remove("has-error");
+    tooltip.textContent = "No errors. System running normally.";
+  }
+}
+
+function updateClock() {
+  const parts = londonParts();
+  let hour = parts.hour;
+  const ampm = hour >= 12 ? "PM" : "AM";
+  hour = hour % 12 || 12;
+
+  document.getElementById("clock").innerHTML =
+    `${String(hour).padStart(2, "0")}:${String(parts.minute).padStart(2, "0")}` +
+    `<span class="seconds">:${String(parts.second).padStart(2, "0")}</span>` +
+    `<span class="ampm">${ampm}</span>`;
+
+  if (prayerModeActive) {
+    document.getElementById("prayer-mode-time").textContent =
+      `${hour}:${String(parts.minute).padStart(2, "0")} ${ampm}`;
+  }
+}
+
+function updateDates() {
+  const now = new Date();
+  document.getElementById("gregorian-date").textContent = dateFormatter.format(now);
+
+  try {
+    document.getElementById("hijri-date").textContent = new Intl.DateTimeFormat(
+      "en-GB-u-ca-islamic-umalqura",
+      { timeZone: TIME_ZONE, day: "numeric", month: "long", year: "numeric" }
+    ).format(now);
+  } catch {
+    document.getElementById("hijri-date").textContent = "";
+  }
+}
+
+function scheduleToRows(schedule) {
+  return [
+    { name: "Fajr", start: schedule.Fajr, jamaat: schedule.FajrJamaat },
+    { name: "Sunrise", start: schedule.Sunrise, jamaat: "—" },
+    { name: "Dhuhr", start: schedule.Dhuhr, jamaat: schedule.DhuhrJamaat },
+    { name: "Asr", start: schedule.Asr, jamaat: schedule.AsrJamaat },
+    { name: "Maghrib", start: schedule.Maghrib, jamaat: schedule.MaghribJamaat },
+    { name: "Isha", start: schedule.Isha, jamaat: schedule.IshaJamaat }
+  ];
+}
+
+function loadTodaysPrayers() {
+  loadedDateKey = dateKey();
+  const schedule = PRAYER_DATA.find(day => day.date === loadedDateKey);
+
+  if (schedule) {
+    dailyPrayers = scheduleToRows(schedule);
+  } else {
+    dailyPrayers = [
+      { name: "Fajr", start: "--:--", jamaat: "--:--" },
+      { name: "Sunrise", start: "--:--", jamaat: "—" },
+      { name: "Dhuhr", start: "--:--", jamaat: "--:--" },
+      { name: "Asr", start: "--:--", jamaat: "--:--" },
+      { name: "Maghrib", start: "--:--", jamaat: "--:--" },
+      { name: "Isha", start: "--:--", jamaat: "--:--" }
+    ];
+    addError(`No prayer times found for ${loadedDateKey}`);
+  }
+
+  renderPrayerTimes();
+  updatePrayerStatus();
+}
+
+function renderPrayerTimes() {
+  document.getElementById("prayer-list").innerHTML = dailyPrayers.map(prayer => `
+    <div class="prayer-row" data-prayer="${prayer.name}">
+      <div class="prayer-name">${prayer.name}</div>
+      <div class="prayer-time">${prayer.start}</div>
+      <div class="prayer-jamaat">${prayer.jamaat}</div>
+    </div>
+  `).join("");
+}
+
+function findNextJamaat(currentMinutes) {
+  for (const prayer of dailyPrayers) {
+    const minutes = timeToMinutes(prayer.jamaat);
+    if (minutes > currentMinutes) {
+      return { prayer, dateOffset: 0, targetMinutes: minutes };
+    }
+  }
+
+  const tomorrowKey = addDays(loadedDateKey, 1);
+  const tomorrowSchedule = PRAYER_DATA.find(day => day.date === tomorrowKey);
+  const tomorrowRows = tomorrowSchedule ? scheduleToRows(tomorrowSchedule) : dailyPrayers;
+  const fajr = tomorrowRows.find(prayer => prayer.name === "Fajr");
+
+  if (!fajr || timeToMinutes(fajr.jamaat) < 0) return null;
+  return { prayer: fajr, dateOffset: 1, targetMinutes: timeToMinutes(fajr.jamaat) + 1440 };
+}
+
+function updatePrayerStatus() {
+  if (!dailyPrayers.length) return;
+
+  const parts = londonParts();
+  const currentMinutes = parts.hour * 60 + parts.minute + parts.second / 60;
+  const startMinutes = dailyPrayers.map(prayer => timeToMinutes(prayer.start));
+  let activeIndex = -1;
+  let nextIndex = -1;
+
+  for (let index = startMinutes.length - 1; index >= 0; index -= 1) {
+    if (startMinutes[index] >= 0 && startMinutes[index] <= currentMinutes) {
+      activeIndex = index;
+      break;
+    }
+  }
+
+  for (let index = 0; index < startMinutes.length; index += 1) {
+    if (startMinutes[index] > currentMinutes) {
+      nextIndex = index;
+      break;
+    }
+  }
+
+  document.querySelectorAll(".prayer-row").forEach((row, index) => {
+    row.classList.toggle("active", index === activeIndex);
+    row.classList.toggle("next", index === nextIndex);
+  });
+
+  const nextJamaat = findNextJamaat(currentMinutes);
+  const countdownTime = document.getElementById("countdown-time");
+  const countdownName = document.getElementById("countdown-name");
+
+  if (!nextJamaat) {
+    countdownTime.textContent = "--:--:--";
+    countdownName.textContent = "Prayer timetable unavailable";
+    return;
+  }
+
+  const currentSeconds = (parts.hour * 60 + parts.minute) * 60 + parts.second;
+  const targetSeconds = nextJamaat.targetMinutes * 60;
+  const difference = Math.max(0, Math.floor(targetSeconds - currentSeconds));
+  const hours = Math.floor(difference / 3600);
+  const minutes = Math.floor((difference % 3600) / 60);
+  const seconds = difference % 60;
+
+  countdownTime.textContent =
+    `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+  countdownName.textContent =
+    `${nextJamaat.prayer.name} Jamaat${nextJamaat.dateOffset ? " (Tomorrow)" : ""} at ${nextJamaat.prayer.jamaat}`;
+}
+
+function updatePrayerMode() {
+  const parts = londonParts();
+  const currentMinutes = parts.hour * 60 + parts.minute;
+  const activePrayer = dailyPrayers.find(prayer => {
+    const jamaat = timeToMinutes(prayer.jamaat);
+    return jamaat >= 0 && currentMinutes >= jamaat - 2 && currentMinutes <= jamaat + 8;
+  });
+
+  const overlay = document.getElementById("prayer-mode-overlay");
+  prayerModeActive = Boolean(activePrayer);
+  overlay.classList.toggle("active", prayerModeActive);
+
+  if (activePrayer) {
+    document.getElementById("prayer-mode-name").textContent = `${activePrayer.name.toUpperCase()} TIME.`;
+  }
+}
+
+function preloadImage(src) {
+  return new Promise(resolve => {
+    const image = new Image();
+    image.onload = () => resolve(src);
+    image.onerror = () => {
+      addError(`Image not found: ${src}`);
+      resolve(null);
+    };
+    image.src = src;
+  });
+}
+
+async function initSlideshow() {
+  const slideshow = document.getElementById("slideshow");
+  const indicators = document.getElementById("indicators");
+  const checked = await Promise.all(CONFIG.adverts.map(preloadImage));
+  const valid = checked.filter(Boolean);
+
+  if (!valid.length) {
+    indicators.hidden = true;
+    return;
+  }
+
+  slideshow.innerHTML = valid.map((src, index) => `
+    <div class="slide${index === 0 ? " active" : ""}">
+      <img src="${src}" alt="YMC notice ${index + 1}">
+    </div>
+  `).join("");
+
+  indicators.innerHTML = valid.map((_, index) =>
+    `<span class="indicator${index === 0 ? " active" : ""}"></span>`
+  ).join("");
+
+  slideElements = [...slideshow.querySelectorAll(".slide")];
+  if (slideElements.length > 1) {
+    slideTimer = window.setInterval(nextSlide, CONFIG.slideDuration);
+  }
+}
+
+function nextSlide() {
+  if (slideElements.length < 2) return;
+
+  const indicators = [...document.querySelectorAll(".indicator")];
+  slideElements[currentSlide].classList.remove("active");
+  indicators[currentSlide]?.classList.remove("active");
+  currentSlide = (currentSlide + 1) % slideElements.length;
+  slideElements[currentSlide].classList.add("active");
+  indicators[currentSlide]?.classList.add("active");
+}
+
+function initAnnouncements() {
+  const announcements = CONFIG.announcements
+    .split(/\s*[•|]\s*/)
+    .map(item => item.trim())
+    .filter(Boolean);
+
+  const content = document.querySelector(".announcement-content");
+  const element = document.getElementById("announcement-text");
+
+  if (!announcements.length) {
+    element.textContent = "Welcome to Yardley Muslim Centre.";
+    element.classList.add("visible");
+    return;
+  }
+
+  const showNext = () => {
+    window.clearTimeout(announcementTimer);
+    element.classList.remove("visible", "is-long");
+    element.style.removeProperty("--announcement-duration");
+
+    window.setTimeout(() => {
+      const message = announcements[announcementIndex];
+      announcementIndex = (announcementIndex + 1) % announcements.length;
+      element.textContent = message;
+      element.classList.add("visible");
+
+      const isLong = element.scrollWidth > content.clientWidth;
+      let displayTime = CONFIG.announcementDuration;
+
+      if (isLong) {
+        const scrollSeconds = Math.max(11, message.length / 10);
+        element.style.setProperty("--announcement-duration", `${scrollSeconds}s`);
+        element.classList.add("is-long");
+        displayTime = (scrollSeconds + 2) * 1000;
+      }
+
+      announcementTimer = window.setTimeout(showNext, displayTime);
+    }, 350);
+  };
+
+  showNext();
+}
+
+function updateFooter() {
+  document.getElementById("footer-address").textContent = CONFIG.contact.address;
+  document.getElementById("footer-phone").textContent = CONFIG.contact.phone;
+  document.getElementById("footer-email").textContent = CONFIG.contact.email;
+  document.getElementById("footer-website").textContent = CONFIG.contact.website;
+}
+
+function initCursorHider() {
+  const hide = () => document.body.classList.add("hide-cursor");
+  const reset = () => {
+    document.body.classList.remove("hide-cursor");
+    window.clearTimeout(cursorTimer);
+    cursorTimer = window.setTimeout(hide, 10000);
+  };
+
+  document.addEventListener("mousemove", reset);
+  reset();
+}
+
+function init() {
+  updateClock();
+  updateDates();
+  loadTodaysPrayers();
+  initSlideshow();
+  initAnnouncements();
+  updateFooter();
+  initCursorHider();
+  updatePrayerMode();
+
+  window.setInterval(() => {
+    updateClock();
+    updatePrayerStatus();
+  }, 1000);
+
+  window.setInterval(() => {
+    updateDates();
+    updatePrayerMode();
+
+    if (dateKey() !== loadedDateKey) {
+      loadTodaysPrayers();
+    }
+  }, 30000);
+}
+
+init();
+</script>
+</body>
+</html>
