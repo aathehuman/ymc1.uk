@@ -13,7 +13,7 @@ import { writeAuditLog } from "../staff/audit.js";
 const host = document.querySelector("[data-youth-application-list]");
 
 function text(tag, value, className = "") {
-  const element = document.createElement("tag");
+  const element = document.createElement(tag);
   element.textContent = value || "";
   if (className) element.className = className;
   return element;
