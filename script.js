@@ -28,6 +28,13 @@ const ymcClockPartsFormatter = new Intl.DateTimeFormat("en-GB", {
   hourCycle: "h23"
 });
 
+function applyHeadingWeightOverrides() {
+  if (document.getElementById("ymc-heading-weight-overrides")) return;
+  const style = document.createElement("style");
+  style.id = "ymc-heading-weight-overrides";
+  style.textContent = "h1,h2,h3{font-weight:400}";
+  document.head.append(style);
+}
 
 function ymcLondonParts(date = new Date()) {
   const values = {};
@@ -115,7 +122,7 @@ function renderSharedLayout() {
     oldFooter.outerHTML = `<footer class="footer"><div class="container footer-grid">
       <div class="footer-col"><h3><a class="home-link" href="/">Yardley Muslim Centre</a></h3><p class="footer-tagline">Building Faith, Strengthening Community, Inspiring Futures.</p><div class="social-links"><a href="https://www.facebook.com/YardleyMuslimCentre/" target="_blank" rel="noopener noreferrer" aria-label="YMC on Facebook"><i class="fab fa-facebook-f"></i></a><a href="https://youtube.com/@TaqwaChannel-UK/" target="_blank" rel="noopener noreferrer" aria-label="YMC on YouTube"><i class="fa-brands fa-youtube"></i></a></div></div>
       <div class="footer-col"><h4>Quick Links</h4><ul class="footer-links"><li><a href="/prayer.html">Prayer Times</a></li><li><a href="/services/">Services</a></li><li><a href="/events.html">Events</a></li><li><a href="/resources/">Resources</a></li><li><a href="/youth/">Youth</a></li><li><a href="/about.html">About</a></li></ul></div>
-      <div class="footer-col"><h4>Contact Us</h4><p><a href="https://maps.app.goo.gl/7oWLcudyF6aHySRFA" class="footer-link">47-51 Stoney Lane<br>Birmingham, B25 8RE</a></p><p><a href="tel:+447846252413" class="footer-link">07846 252 413</a> / <a href="tel:+447588475739" class="footer-link">07588 475 739</a></p><p><a href="mailto:salam@yardleymuslimcentre.co.uk" class="footer-link">salam@yardleymuslimcentre.co.uk</a></p></div>
+      <div class="footer-col"><h4>Contact Us</h4><p><a href="https://maps.app.goo.gl/7oWLcudyF6aHySRFA" class="footer-link">47-51 Stoney Lane<br>Birmingham, B25 8RE</a></p><p><a href="tel:+447846252413" class="footer-link">07846 252 413</a> / <a href="tel:+447588475739" class="footer-link">07588 475 739</a></p><p><a href="mailto:info@ymc1.uk" class="footer-link">info@ymc1.uk</a></p></div>
       <div class="footer-col footer-donate-col"><h4>Support Us</h4><p>Your donations keep the mosque running.</p><a href="/donate.html" class="btn-donate">Donate Now</a></div>
     </div><div class="footer-bottom"><p>&copy; <span id="year"></span> Yardley Muslim Centre. All rights reserved. <span aria-hidden="true">·</span> <a href="/admin/">Admin</a></p><p>Website by <a href="https://abdul-aziz.co.uk/">aa-infinitech</a></p></div></footer>`;
   }
@@ -434,6 +441,7 @@ async function loadPrayerData() {
 }
 
 async function init() {
+  applyHeadingWeightOverrides();
   renderSharedLayout();
   initNavbar();
   ensureOpenGraph();
