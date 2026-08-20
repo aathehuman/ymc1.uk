@@ -1,0 +1,11 @@
+{
+  "name": "ymc-staff-portal",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "firebase-admin": "14.2.0"
+  }
+}
