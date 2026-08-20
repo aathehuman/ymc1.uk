@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0a0f1c">
+  <title>Staff | Yardley Muslim Centre</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicons/favicon-16x16.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/staff/theme.css">
+  <link rel="stylesheet" href="/staff/portal-extras.css">
+</head>
+<body>
+  <nav class="navbar staff-navbar"><div class="nav-container"><a class="nav-logo" href="/"><span class="logo-img"><img src="/assets/logos/edited-logo-notext.png" alt="" aria-hidden="true"></span><span class="nav-logo-text"><span class="logo-text">Yardley Muslim Centre</span><span class="logo-subtext">Staff Portal</span></span></a><a class="staff-view-site" href="/"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Main website</a></div></nav>
+
+  <main class="staff-shell">
+    <section class="staff-login-wrap" data-login-panel>
+      <div class="staff-login-card">
+        <p class="staff-kicker">Yardley Muslim Centre</p>
+        <h1>Staff sign in</h1>
+        <p class="staff-muted">Access YMC staff tools, website content and submitted applications from one place.</p>
+        <form data-login-form class="staff-form staff-login-form">
+          <label>Email<input type="email" name="email" autocomplete="email" required></label>
+          <label>Password<input type="password" name="password" autocomplete="current-password" required></label>
+          <div class="staff-password-row"><span>Use your individual staff-portal account.</span><button class="staff-text-button staff-password-reset" type="button" data-reset-password>Forgot password?</button></div>
+          <button class="btn-donate staff-submit" type="submit">Sign in</button>
+          <p class="staff-status" data-login-result aria-live="polite"></p>
+        </form>
+        <div class="staff-login-divider"><span>YMC email</span></div>
+        <div class="staff-login-mail"><span class="staff-login-mail-icon" aria-hidden="true"><i class="fa-solid fa-envelope"></i></span><div><strong>Need to access YMC email instead?</strong><p>Mail uses a separate Zoho sign-in. Use the <code>@ymc1.uk</code> mailbox you need, such as <code>info@ymc1.uk</code> or <code>admin@ymc1.uk</code>.</p><a class="staff-login-mail-link" href="https://mail.zoho.eu/" target="_blank" rel="noopener noreferrer">Open Zoho Mail <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a></div></div>
+        <p class="staff-login-note">Staff portal and YMC email use separate sign-ins.</p>
+      </div>
+    </section>
+
+    <section class="staff-portal hidden" data-portal>
+      <header class="staff-hero"><div class="container staff-hero-inner"><div><p class="staff-kicker">YMC Staff</p><h1>Assalamu alaikum.</h1><p>Manage the parts of YMC that need staff attention, all in one place.</p></div><div class="staff-account-card"><span class="staff-account-label">Signed in as</span><strong data-user-email></strong><button class="staff-text-button" type="button" data-sign-out>Sign out</button></div></div></header>
+      <div class="staff-tabs-wrap"><div class="container staff-tabs" role="navigation" aria-label="Staff portal sections"><button class="staff-tab active" type="button" data-view-button="home"><i class="fa-solid fa-house" aria-hidden="true"></i><span>Overview</span></button><button class="staff-tab" type="button" data-view-button="content"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i><span>Website</span></button><button class="staff-tab" type="button" data-view-button="submissions"><i class="fa-solid fa-inbox" aria-hidden="true"></i><span>Submissions</span></button><button class="staff-tab" type="button" data-view-button="audit"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i><span>Audit log</span></button></div></div>
+
+      <div class="container staff-content">
+        <section data-view="home"><div class="staff-section-heading"><p class="staff-kicker">Overview</p><h2>What do you need to manage?</h2><p>Choose a section below. The public website stays separate from these staff-only tools.</p></div><div class="staff-action-grid"><button class="staff-action-card" type="button" data-open-mail><span class="staff-action-icon"><i class="fa-solid fa-envelope"></i></span><span><strong>YMC Mail</strong><small>Open Zoho Mail for info@ymc1.uk or admin@ymc1.uk.</small></span><i class="fa-solid fa-arrow-right staff-action-arrow"></i></button><button class="staff-action-card" type="button" data-go-view="content"><span class="staff-action-icon"><i class="fa-solid fa-calendar-days"></i></span><span><strong>Website content</strong><small>Manage events and announcements shown publicly.</small></span><i class="fa-solid fa-arrow-right staff-action-arrow"></i></button><button class="staff-action-card" type="button" data-go-view="submissions"><span class="staff-action-icon"><i class="fa-solid fa-clipboard-list"></i></span><span><strong>Submissions</strong><small>Review youth applications and submitted questions.</small></span><i class="fa-solid fa-arrow-right staff-action-arrow"></i></button><a class="staff-action-card" href="/" target="_blank" rel="noopener"><span class="staff-action-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span><span><strong>View public website</strong><small>Open ymc1.uk in a new tab.</small></span><i class="fa-solid fa-arrow-right staff-action-arrow"></i></a></div></section>
+
+        <section class="hidden" data-view="content"><div class="staff-section-heading"><p class="staff-kicker">Website management</p><h2>Public content</h2><p>Add or update events and announcements. Changes here affect the public YMC website.</p></div><p class="staff-status" data-admin-status aria-live="polite"></p><div class="staff-admin-grid"><section class="staff-card staff-admin-card"><div class="staff-card-heading"><span class="staff-card-icon"><i class="fa-solid fa-calendar-plus"></i></span><div><h3>Add event</h3><p>Create a regular or special programme.</p></div></div><form class="staff-form" data-event-form><label>Type<select name="type"><option value="special">Special event</option><option value="regular">Regular event</option></select></label><label>Title<input name="title" maxlength="120" required></label><label>Description<textarea name="description" maxlength="1200" required></textarea></label><label>Date and time<input type="datetime-local" name="startAt"></label><div class="staff-form-grid"><label>Badge top<input name="badgeTop" maxlength="12" placeholder="Every"></label><label>Badge bottom<input name="badgeBottom" maxlength="12" placeholder="Fri"></label></div><label>Optional link<input type="url" name="linkUrl" placeholder="https://..."></label><label>Link label<input name="linkLabel" maxlength="50" placeholder="Register"></label><label class="staff-check"><input type="checkbox" name="published" checked><span>Publish immediately</span></label><button class="btn-donate" type="submit">Save Event</button></form></section><section class="staff-card staff-admin-card"><div class="staff-card-heading"><span class="staff-card-icon"><i class="fa-solid fa-bullhorn"></i></span><div><h3>Add announcement</h3><p>Publish an important notice across the site.</p></div></div><form class="staff-form" data-announcement-form><label>Title<input name="title" maxlength="100" required></label><label>Message<textarea name="message" maxlength="600" required></textarea></label><label>Priority<input type="number" name="priority" value="0" min="0" max="10"></label><label>Optional expiry<input type="datetime-local" name="expiresAt"></label><label>Optional link<input type="url" name="linkUrl" placeholder="https://..."></label><label>Link label<input name="linkLabel" maxlength="50" placeholder="Read more"></label><label class="staff-check"><input type="checkbox" name="active" checked><span>Active</span></label><button class="btn-donate" type="submit">Save Announcement</button></form></section></div><div class="staff-admin-grid staff-list-grid"><section class="staff-card staff-admin-card"><div class="staff-card-heading"><div><h3>Events</h3><p>Existing programmes currently stored in Firebase.</p></div></div><div class="staff-admin-list" data-event-list></div></section><section class="staff-card staff-admin-card"><div class="staff-card-heading"><div><h3>Announcements</h3><p>Current active and inactive notices.</p></div></div><div class="staff-admin-list" data-announcement-list></div></section></div></section>
+
+        <section class="hidden" data-view="submissions"><div class="staff-section-heading"><p class="staff-kicker">Submissions</p><h2>People & questions</h2><p>Private submissions stay inside the staff area and should only be used for their intended purpose.</p></div><div class="staff-submission-stack"><section class="staff-card staff-admin-card"><div class="staff-card-heading"><span class="staff-card-icon"><i class="fa-solid fa-people-group"></i></span><div><h3>Youth applications</h3><p>Review Young Leader and Young Mu’adhin & Imam applications.</p></div></div><div class="staff-admin-list" data-youth-application-list></div></section><section class="staff-card staff-admin-card"><div class="staff-card-heading"><span class="staff-card-icon"><i class="fa-solid fa-circle-question"></i></span><div><h3>Submitted questions</h3><p>Review questions before publishing an approved answer.</p></div></div><div class="staff-admin-list" data-question-list></div></section></div></section>
+
+        <section class="hidden" data-view="audit"><div class="staff-section-heading staff-heading-row"><div><p class="staff-kicker">Accountability</p><h2>Audit log</h2><p>Recent staff actions are recorded here so changes can be traced back to the staff account that made them.</p></div><div class="staff-heading-actions"><button class="btn-outline" type="button" data-refresh-audit><i class="fa-solid fa-rotate-right" aria-hidden="true"></i> Refresh</button></div></div><section class="staff-card staff-admin-card"><div class="staff-card-heading"><span class="staff-card-icon"><i class="fa-solid fa-clock-rotate-left"></i></span><div><h3>Recent activity</h3><p>The latest 100 recorded staff actions. Private question text and application details are not copied into this log.</p></div></div><div class="staff-audit-list" data-audit-list><p class="firebase-empty">Open this section to load recent staff activity.</p></div></section></section>
+      </div>
+    </section>
+  </main>
+
+  <dialog data-mail-dialog><div class="staff-compose staff-form"><div class="staff-compose-title"><div><p class="staff-kicker">YMC Mail</p><h2>Open Zoho Mail</h2></div><button class="staff-text-button" type="button" data-close-mail-dialog>Close</button></div><p class="staff-muted">YMC email is managed in Zoho rather than inside this staff portal.</p><p class="staff-muted">On the Zoho sign-in page, sign in using the mailbox you need — normally <strong>info@ymc1.uk</strong>, or <strong>admin@ymc1.uk</strong> when you specifically need the admin mailbox. Your staff-portal login is separate.</p><div class="staff-heading-actions"><button class="btn-outline" type="button" data-cancel-mail-dialog>Cancel</button><a class="btn-donate" href="https://mail.zoho.eu/" target="_blank" rel="noopener noreferrer" data-open-zoho>Continue to Zoho Mail</a></div></div></dialog>
+
+  <script type="module" src="/staff/staff.js"></script>
+  <script type="module" src="/staff/admin-tools.js"></script>
+  <script type="module" src="/admin/youth-applications.js"></script>
+</body>
+</html>
