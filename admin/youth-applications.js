@@ -8,14 +8,23 @@ import {
   getDocs,
   updateDoc
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+import { writeAuditLog } from "../staff/audit.js";
 
 const host = document.querySelector("[data-youth-application-list]");
 
 function text(tag, value, className = "") {
-  const element = document.createElement(tag);
+  const element = document.createElement("tag");
   element.textContent = value || "";
   if (className) element.className = className;
   return element;
+}
+
+async function recordAudit(action, resourceId, summary) {
+  try {
+    await writeAuditLog(action, "youth_application", resourceId, summary);
+  } catch (error) {
+    console.warn("Could not record youth application audit event", error);
+  }
 }
 
 function applicationLabel(type) {
@@ -81,9 +90,13 @@ function renderApplication(item) {
   review.addEventListener("click", async () => {
     review.disabled = true;
     try {
-      await updateDoc(doc(db, "youthApplications", item.id), {
-        status: item.status === "reviewed" ? "new" : "reviewed"
-      });
+      const nextStatus = item.status === "reviewed" ? "new" : "reviewed";
+      await updateDoc(doc(db, "youthApplications", item.id), { status: nextStatus });
+      await recordAudit(
+        nextStatus === "reviewed" ? "youth_application.mark_reviewed" : "youth_application.mark_new",
+        item.id,
+        nextStatus === "reviewed" ? "Marked a youth application as reviewed." : "Marked a youth application as new."
+      );
       await loadApplications();
     } catch (error) {
       console.error("Unable to update youth application", error);
@@ -98,6 +111,7 @@ function renderApplication(item) {
     remove.disabled = true;
     try {
       await deleteDoc(doc(db, "youthApplications", item.id));
+      await recordAudit("youth_application.delete", item.id, "Deleted a youth application.");
       card.remove();
     } catch (error) {
       console.error("Unable to delete youth application", error);
