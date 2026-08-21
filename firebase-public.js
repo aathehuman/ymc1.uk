@@ -235,12 +235,20 @@ function initialiseQuestionForm() {
     const result = form.querySelector("[data-form-result]");
     const data = new FormData(form);
     const question = String(data.get("question") || "").trim();
+    const email = String(data.get("email") || "").trim();
+    const publishPublicly = data.get("publishPublicly") === "on";
     const honeypot = String(data.get("website") || "").trim();
 
     if (honeypot) return;
 
     if (question.length < 10) {
       result.textContent = "Please add a little more detail to your question.";
+      result.dataset.status = "error";
+      return;
+    }
+
+    if (!publishPublicly && !email) {
+      result.textContent = "Please enter an email address for a private reply, or allow your question and approved answer to be published publicly.";
       result.dataset.status = "error";
       return;
     }
@@ -256,19 +264,36 @@ function initialiseQuestionForm() {
     button.textContent = "Sending…";
 
     try {
-      const anonymous = data.get("anonymous") === "on";
-      await addDoc(collection(db, "questions"), {
+      const anonymous = publishPublicly && data.get("anonymous") === "on";
+      const questionRef = await addDoc(collection(db, "questions"), {
         name: anonymous ? "" : String(data.get("name") || "").trim(),
-        email: String(data.get("email") || "").trim(),
+        email,
         anonymous,
+        publishPublicly,
         question,
         status: "new",
         createdAt: serverTimestamp()
       });
 
+      try {
+        const notificationResponse = await fetch("/.netlify/functions/notify-new-question", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ questionId: questionRef.id })
+        });
+        if (!notificationResponse.ok) {
+          const payload = await notificationResponse.json().catch(() => ({}));
+          console.warn("Question saved, but staff notification email failed:", payload.error || notificationResponse.status);
+        }
+      } catch (notificationError) {
+        console.warn("Question saved, but staff notification email could not be requested:", notificationError);
+      }
+
       localStorage.setItem("ymc-question-submitted-at", String(Date.now()));
       form.reset();
-      result.textContent = "Question sent. It will be reviewed before anything is published, InShaaAllah.";
+      result.textContent = publishPublicly
+        ? "Question sent. It will be reviewed before anything is published, InShaaAllah."
+        : "Question sent. If approved, the answer will be sent to your email privately, InShaaAllah.";
       result.dataset.status = "success";
     } catch (error) {
       console.error(error);
