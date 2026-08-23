@@ -2,14 +2,15 @@
   width: min(1120px, calc(100% - 32px));
   margin: 20px auto;
   padding: 18px 20px;
-  border: 1px solid rgba(15, 23, 42, .1);
+  border: 1px solid #29465f;
   border-radius: 18px;
-  background: #fff;
+  background: #132235;
+  color: #f4f1e8;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 18px;
-  box-shadow: 0 10px 30px rgba(15, 23, 42, .06);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .14);
 }
 
 .push-panel-copy {
@@ -21,11 +22,12 @@
 .push-panel-copy strong {
   display: block;
   margin-bottom: 3px;
+  color: #f5d66f;
 }
 
 .push-panel-copy p {
   margin: 0;
-  color: #64748b;
+  color: #b8c4d4;
 }
 
 .push-panel-icon {
@@ -35,12 +37,22 @@
   display: grid;
   place-items: center;
   flex: 0 0 42px;
-  background: rgba(181, 141, 55, .12);
-  color: #8c6b26;
+  background: rgba(245, 214, 111, .12);
+  border: 1px solid rgba(245, 214, 111, .18);
+  color: #d6ae43;
 }
 
 .push-panel-button {
   flex: 0 0 auto;
+  border: 1px solid #5da7d3;
+  background: #2f8fbd;
+  color: #07111d;
+  font-weight: 700;
+}
+
+.push-panel-button:hover,
+.push-panel-button:focus-visible {
+  background: #49a2ce;
 }
 
 @media (max-width: 700px) {
