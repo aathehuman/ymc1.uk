@@ -17,7 +17,7 @@ export const appCheckConfig = {
 export const webPushConfig = {
   // Firebase Console > Project settings > Cloud Messaging > Web Push certificates.
   // This is a PUBLIC key and is safe to include in client-side code.
-  vapidKey: "PASTE_FIREBASE_WEB_PUSH_VAPID_PUBLIC_KEY_HERE",
+  vapidKey: "BNh_0W-vFkQcQ-excDDCeo-MMl3hd5jIUr6DAsNSoyN66xnzao6M3vddU1MqiGO8WW1qSxDgIsgw1_ytU6akBE4",
   topic: "ymc-general"
 };
 
