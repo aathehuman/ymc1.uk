@@ -15,17 +15,17 @@ const PERMISSION_LABELS = {
 let installed = false;
 
 function setAllViews(name) {
-  document.querySelectorAll("[data-view]").forEach(section => {
-    section.classList.toggle("hidden", section.dataset.view !== name);
-  });
-  document.querySelectorAll("[data-view-button]").forEach(button => {
-    button.classList.toggle("active", button.dataset.viewButton === name);
-  });
+  document.querySelectorAll("[data-view]").forEach(section => section.classList.toggle("hidden", section.dataset.view !== name));
+  document.querySelectorAll("[data-view-button]").forEach(button => button.classList.toggle("active", button.dataset.viewButton === name));
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function checkbox(name, label, description = "") {
   return `<label class="staff-check"><input type="checkbox" name="${name}"><span><strong>${label}</strong>${description ? `<small>${description}</small>` : ""}</span></label>`;
+}
+
+function escapeAttribute(value) {
+  return String(value || "").replace(/&/g, "&amp;").replace(/"/g, "&quot;");
 }
 
 function formatWhen(value) {
@@ -66,12 +66,6 @@ function buildSiteDevView() {
     <div class="staff-section-heading"><p class="staff-kicker">Site developer</p><h2>Site controls</h2><p>Manage notification automation and staff access from one place.</p></div>
 
     <section class="staff-card staff-admin-card">
-      <div class="staff-card-heading"><span class="staff-card-icon"><i class="fa-solid fa-users-gear"></i></span><div><h3>Staff accounts</h3><p>See approved accounts, recent meaningful activity and control what each person can manage.</p></div></div>
-      <div class="staff-admin-list staff-account-permissions" data-staff-accounts><p class="firebase-empty">Open Site dev to load staff accounts.</p></div>
-      <p class="staff-status" data-staff-accounts-status aria-live="polite"></p>
-    </section>
-
-    <section class="staff-card staff-admin-card">
       <div class="staff-card-heading"><span class="staff-card-icon"><i class="fa-solid fa-bell"></i></span><div><h3>Prayer notifications</h3><p>Uses YMC's own timetable. Changes only affect future automatic notifications.</p></div></div>
       <form class="staff-form" data-prayer-notification-settings>
         ${checkbox("prayerNotificationsEnabled", "Automatic prayer notifications", "Master switch for all scheduled salah notifications.")}
@@ -87,35 +81,57 @@ function buildSiteDevView() {
         <p class="staff-status" data-prayer-notification-status aria-live="polite"></p>
       </form>
     </section>
+
+    <section class="staff-card staff-admin-card">
+      <div class="staff-card-heading"><span class="staff-card-icon"><i class="fa-solid fa-users-gear"></i></span><div><h3>Staff accounts</h3><p>Tap an account to view or change its role and permissions.</p></div></div>
+      <div class="staff-admin-list staff-account-permissions" data-staff-accounts><p class="firebase-empty">Open Site dev to load staff accounts.</p></div>
+      <p class="staff-status" data-staff-accounts-status aria-live="polite"></p>
+    </section>
   `;
   content.append(section);
   section.querySelector("[data-prayer-notification-settings]")?.addEventListener("submit", saveSettings);
 }
 
 function accountCard(account) {
-  const card = document.createElement("article");
-  card.className = "admin-item staff-permission-card";
+  const details = document.createElement("details");
+  details.className = "staff-account-details";
 
-  const header = document.createElement("div");
-  header.className = "admin-item-top";
-  const copy = document.createElement("div");
-  copy.className = "admin-item-copy";
-  const title = document.createElement("h3");
+  const summary = document.createElement("summary");
+  summary.className = "staff-account-summary";
+
+  const identity = document.createElement("div");
+  identity.className = "staff-account-summary-copy";
+  const titleRow = document.createElement("div");
+  titleRow.className = "staff-account-title-row";
+  const title = document.createElement("strong");
   title.textContent = account.name || account.email || "Unnamed staff account";
-  const meta = document.createElement("p");
-  meta.className = "admin-meta";
-  meta.textContent = `${account.email || "No email saved"} · ${account.role || "staff"}`;
-  const last = document.createElement("p");
+  titleRow.append(title);
+  if (account.isCurrentUser) {
+    const you = document.createElement("span");
+    you.className = "staff-account-you";
+    you.textContent = "You";
+    titleRow.append(you);
+  }
+  const meta = document.createElement("span");
+  meta.className = "staff-account-summary-meta";
+  meta.textContent = `${account.email || "No email saved"} · ${account.role === "site-dev" ? "Site developer" : "Staff"}`;
+  const last = document.createElement("span");
   last.className = "staff-account-last-action";
   last.textContent = account.lastAction ? `${account.lastAction.summary} · ${formatWhen(account.lastAction.createdAt)}` : "No meaningful activity recorded";
-  copy.append(title, meta, last);
-  header.append(copy);
+  identity.append(titleRow, meta, last);
+
+  const chevron = document.createElement("i");
+  chevron.className = "fa-solid fa-chevron-down staff-account-chevron";
+  chevron.setAttribute("aria-hidden", "true");
+  summary.append(identity, chevron);
 
   const form = document.createElement("form");
   form.className = "staff-form staff-permission-form";
   form.innerHTML = `
-    <label>Display name<input name="name" maxlength="120" value="${String(account.name || "").replace(/&/g, "&amp;").replace(/"/g, "&quot;")}"></label>
-    <label>Role<select name="role"><option value="staff" ${account.role !== "site-dev" ? "selected" : ""}>Staff</option><option value="site-dev" ${account.role === "site-dev" ? "selected" : ""}>Site developer</option></select></label>
+    <div class="staff-form-grid">
+      <label>Display name<input name="name" maxlength="120" value="${escapeAttribute(account.name)}"></label>
+      <label>Role<select name="role"><option value="staff" ${account.role !== "site-dev" ? "selected" : ""}>Staff</option><option value="site-dev" ${account.role === "site-dev" ? "selected" : ""}>Site developer</option></select></label>
+    </div>
     <fieldset class="staff-permission-fieldset"><legend>Permissions</legend><div class="staff-permission-grid">${Object.entries(PERMISSION_LABELS).map(([key, label]) => `<label class="staff-check"><input type="checkbox" name="${key}" ${account.permissions?.[key] ? "checked" : ""}><span>${label}</span></label>`).join("")}</div></fieldset>
     <button class="btn-outline" type="submit">Save access</button>
     <p class="staff-status" aria-live="polite"></p>
@@ -127,16 +143,15 @@ function accountCard(account) {
   }
 
   form.addEventListener("submit", event => saveAccount(event, account.uid));
-  card.append(header, form);
-  return card;
+  details.append(summary, form);
+  return details;
 }
 
 async function loadAccounts() {
   const host = document.querySelector("[data-staff-accounts]");
   const status = document.querySelector("[data-staff-accounts-status]");
   if (!host) return;
-  host.replaceChildren();
-  host.append(Object.assign(document.createElement("p"), { className: "firebase-empty", textContent: "Loading staff accounts…" }));
+  host.replaceChildren(Object.assign(document.createElement("p"), { className: "firebase-empty", textContent: "Loading staff accounts…" }));
   if (status) status.textContent = "";
 
   try {
