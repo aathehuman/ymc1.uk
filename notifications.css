@@ -1,0 +1,55 @@
+.push-panel {
+  width: min(1120px, calc(100% - 32px));
+  margin: 20px auto;
+  padding: 18px 20px;
+  border: 1px solid rgba(15, 23, 42, .1);
+  border-radius: 18px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, .06);
+}
+
+.push-panel-copy {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.push-panel-copy strong {
+  display: block;
+  margin-bottom: 3px;
+}
+
+.push-panel-copy p {
+  margin: 0;
+  color: #64748b;
+}
+
+.push-panel-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  flex: 0 0 42px;
+  background: rgba(181, 141, 55, .12);
+  color: #8c6b26;
+}
+
+.push-panel-button {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 700px) {
+  .push-panel {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .push-panel-button {
+    width: 100%;
+  }
+}
