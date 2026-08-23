@@ -11,6 +11,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 import { loadAuditLog, writeAuditLog } from "./audit.js";
 import "./push.js";
+import "./site-dev.js";
 
 const loginPanel = document.querySelector("[data-login-panel]");
 const portal = document.querySelector("[data-portal]");
