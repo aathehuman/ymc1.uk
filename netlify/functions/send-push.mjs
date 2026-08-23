@@ -32,7 +32,7 @@ export async function handler(event) {
   if (event.httpMethod !== "POST") return json(405, { error: "Method not allowed." });
 
   try {
-    const staff = await requireApprovedStaff(event);
+    const staff = await requireApprovedStaff(event, "sendNotifications");
     const body = parseBody(event);
     const title = cleanText(body.title, 80);
     const message = cleanText(body.message, 240);
@@ -46,10 +46,7 @@ export async function handler(event) {
 
     const messageId = await getAdminMessaging().send({
       topic: TOPIC,
-      notification: {
-        title,
-        body: message
-      },
+      notification: { title, body: message },
       webpush: {
         notification: {
           icon: `${SITE_ORIGIN}/assets/favicons/android-chrome-192x192.png`,
@@ -57,10 +54,7 @@ export async function handler(event) {
         },
         fcmOptions: { link }
       },
-      data: {
-        sentBy: staff.uid,
-        link
-      }
+      data: { sentBy: staff.uid, link }
     });
 
     return json(200, { ok: true, messageId });
