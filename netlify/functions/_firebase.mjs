@@ -21,7 +21,7 @@ export function getAdminMessaging() {
   return getMessaging(getAdminApp());
 }
 
-export async function requireApprovedStaff(event) {
+export async function requireApprovedStaff(event, permission = null) {
   const header = event.headers?.authorization || event.headers?.Authorization || "";
   if (!header.startsWith("Bearer ")) {
     const error = new Error("Authentication required.");
@@ -40,10 +40,17 @@ export async function requireApprovedStaff(event) {
     throw error;
   }
 
+  const profile = snapshot.data() || {};
+  if (permission && profile.role !== "site-dev" && profile.permissions?.[permission] !== true) {
+    const error = new Error("Your staff account does not have permission for this action.");
+    error.statusCode = 403;
+    throw error;
+  }
+
   return {
     uid: decoded.uid,
-    email: decoded.email || null,
-    profile: snapshot.data() || {}
+    email: decoded.email || profile.email || null,
+    profile
   };
 }
 
