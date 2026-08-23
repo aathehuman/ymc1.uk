@@ -14,6 +14,13 @@ export const appCheckConfig = {
   siteKey: "6LfYeHItAAAAAOiEVxWRAZoIhPSeLQbNjAdgH5wc"
 };
 
+export const webPushConfig = {
+  // Firebase Console > Project settings > Cloud Messaging > Web Push certificates.
+  // This is a PUBLIC key and is safe to include in client-side code.
+  vapidKey: "PASTE_FIREBASE_WEB_PUSH_VAPID_PUBLIC_KEY_HERE",
+  topic: "ymc-general"
+};
+
 export const siteConfig = {
   id: "ymc",
   name: "Yardley Muslim Centre",
