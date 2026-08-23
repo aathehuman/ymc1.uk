@@ -1,29 +1,17 @@
 import { requireApprovedStaff, getAdminFirestore, json, errorResponse } from "./_firebase.mjs";
 
 const ALLOWED_ACTIONS = new Set([
-  "staff.sign_in",
-  "staff.sign_out",
-  "event.create",
-  "event.update",
-  "event.delete",
-  "announcement.create",
-  "announcement.update",
-  "announcement.delete",
-  "question.answer_public",
-  "question.prepare_private",
-  "question.answer_private",
-  "question.delete",
-  "youth_application.mark_reviewed",
-  "youth_application.mark_new",
-  "youth_application.delete"
+  "staff.sign_in", "staff.sign_out", "staff.permissions.update",
+  "event.create", "event.update", "event.delete",
+  "announcement.create", "announcement.update", "announcement.delete",
+  "question.answer_public", "question.prepare_private", "question.answer_private", "question.delete",
+  "youth_application.mark_reviewed", "youth_application.mark_new", "youth_application.delete",
+  "notification.send", "notification.settings.update"
 ]);
 
 const ALLOWED_RESOURCE_TYPES = new Set([
-  "staff",
-  "event",
-  "announcement",
-  "question",
-  "youth_application"
+  "staff", "event", "announcement", "question", "youth_application",
+  "push-notification", "notification-settings"
 ]);
 
 function clean(value, maxLength) {
@@ -39,15 +27,11 @@ function timestampIso(value) {
 
 export async function handler(event) {
   try {
-    const staff = await requireApprovedStaff(event);
+    const staff = await requireApprovedStaff(event, event.httpMethod === "GET" ? "viewAudit" : null);
     const db = getAdminFirestore();
 
     if (event.httpMethod === "GET") {
-      const snapshot = await db.collection("auditLogs")
-        .orderBy("createdAt", "desc")
-        .limit(100)
-        .get();
-
+      const snapshot = await db.collection("auditLogs").orderBy("createdAt", "desc").limit(100).get();
       return json(200, {
         logs: snapshot.docs.map(document => {
           const data = document.data() || {};
@@ -65,9 +49,7 @@ export async function handler(event) {
       });
     }
 
-    if (event.httpMethod !== "POST") {
-      return json(405, { error: "Method not allowed." });
-    }
+    if (event.httpMethod !== "POST") return json(405, { error: "Method not allowed." });
 
     const body = JSON.parse(event.body || "{}");
     const action = clean(body.action, 80);
@@ -75,32 +57,18 @@ export async function handler(event) {
     const resourceId = clean(body.resourceId, 200);
     const summary = clean(body.summary, 180);
 
-    if (!ALLOWED_ACTIONS.has(action)) {
-      return json(400, { error: "Unsupported audit action." });
-    }
-    if (!ALLOWED_RESOURCE_TYPES.has(resourceType)) {
-      return json(400, { error: "Unsupported audit resource type." });
-    }
-    if (!summary) {
-      return json(400, { error: "Audit summary is required." });
-    }
+    if (!ALLOWED_ACTIONS.has(action)) return json(400, { error: "Unsupported audit action." });
+    if (!ALLOWED_RESOURCE_TYPES.has(resourceType)) return json(400, { error: "Unsupported audit resource type." });
+    if (!summary) return json(400, { error: "Audit summary is required." });
 
-    const actorName = clean(
-      staff.profile?.fullName || staff.profile?.name || staff.email || "YMC staff",
-      120
-    );
-
+    const actorName = clean(staff.profile?.fullName || staff.profile?.name || staff.email || "YMC staff", 120);
     const reference = await db.collection("auditLogs").add({
-      action,
-      resourceType,
-      resourceId,
-      summary,
+      action, resourceType, resourceId, summary,
       actorUid: staff.uid,
       actorEmail: staff.email || "",
       actorName,
       createdAt: new Date()
     });
-
     return json(200, { ok: true, id: reference.id });
   } catch (error) {
     if (error instanceof SyntaxError) return json(400, { error: "Invalid request." });
