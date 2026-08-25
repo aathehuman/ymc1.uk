@@ -1,6 +1,9 @@
 import { errorResponse, getAdminMessaging, json, requireApprovedStaff } from "./_firebase.mjs";
 
-const TOPIC = "ymc-general";
+const TOPICS = {
+  public: "ymc-general",
+  staff: "ymc-staff"
+};
 const SITE_ORIGIN = "https://ymc1.uk";
 
 function parseBody(event) {
@@ -36,7 +39,15 @@ export async function handler(event) {
     const body = parseBody(event);
     const title = cleanText(body.title, 80);
     const message = cleanText(body.message, 240);
-    const link = safeLink(body.link);
+    const audience = String(body.audience || "public").trim().toLowerCase();
+    const topic = TOPICS[audience];
+    const link = safeLink(body.link || (audience === "staff" ? "/staff/" : "/"));
+
+    if (!topic) {
+      const error = new Error("Notification audience must be public or staff.");
+      error.statusCode = 400;
+      throw error;
+    }
 
     if (!title || !message) {
       const error = new Error("A notification title and message are required.");
@@ -44,20 +55,21 @@ export async function handler(event) {
       throw error;
     }
 
+    const iconFolder = audience === "staff" ? "staff" : "main";
     const messageId = await getAdminMessaging().send({
-      topic: TOPIC,
+      topic,
       notification: { title, body: message },
       webpush: {
         notification: {
-          icon: `${SITE_ORIGIN}/assets/favicons/main/android-chrome-192x192.png`,
-          badge: `${SITE_ORIGIN}/assets/favicons/main/favicon-32x32.png`
+          icon: `${SITE_ORIGIN}/assets/favicons/${iconFolder}/android-chrome-192x192.png`,
+          badge: `${SITE_ORIGIN}/assets/favicons/${iconFolder}/favicon-32x32.png`
         },
         fcmOptions: { link }
       },
-      data: { sentBy: staff.uid, link }
+      data: { sentBy: staff.uid, audience, link }
     });
 
-    return json(200, { ok: true, messageId });
+    return json(200, { ok: true, audience, messageId });
   } catch (error) {
     return errorResponse(error);
   }
