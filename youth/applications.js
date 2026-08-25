@@ -103,7 +103,22 @@ function initialiseForm(form) {
     submit.textContent = "Sending…";
 
     try {
-      await addDoc(collection(db, "youthApplications"), payload);
+      const applicationRef = await addDoc(collection(db, "youthApplications"), payload);
+
+      try {
+        const notificationResponse = await fetch("/.netlify/functions/notify-staff-youth", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ applicationId: applicationRef.id })
+        });
+        if (!notificationResponse.ok) {
+          const notificationResult = await notificationResponse.json().catch(() => ({}));
+          console.warn("Application saved, but staff push failed:", notificationResult.error || notificationResponse.status);
+        }
+      } catch (notificationError) {
+        console.warn("Application saved, but staff push could not be requested:", notificationError);
+      }
+
       localStorage.setItem(cooldownKey, String(Date.now()));
       form.reset();
       showResult(result, "Application received. YMC will review it and contact you or your parent/guardian if appropriate, InShaaAllah.", "success");
