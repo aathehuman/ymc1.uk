@@ -1,8 +1,9 @@
 import { FieldValue } from "firebase-admin/firestore";
-import { getAdminFirestore, json, errorResponse } from "./_firebase.mjs";
+import { getAdminFirestore, getAdminMessaging, json, errorResponse } from "./_firebase.mjs";
 
 const MAX_QUESTION_AGE_MS = 15 * 60 * 1000;
 const PENDING_LOCK_MS = 2 * 60 * 1000;
+const STAFF_TOPIC = "ymc-staff";
 
 function validQuestionId(value) {
   return /^[A-Za-z0-9_-]{1,200}$/.test(value);
@@ -103,13 +104,39 @@ export async function handler(event) {
       throw httpError(502, "The staff notification email could not be sent.");
     }
 
+    let pushMessageId = null;
+    try {
+      pushMessageId = await getAdminMessaging().send({
+        topic: STAFF_TOPIC,
+        notification: {
+          title: "New YMC Q&A question",
+          body: "A new question has been submitted. Tap to review it in the Staff Portal."
+        },
+        webpush: {
+          notification: {
+            icon: `${siteUrl}/assets/favicons/staff/android-chrome-192x192.png`,
+            badge: `${siteUrl}/assets/favicons/staff/favicon-32x32.png`
+          },
+          fcmOptions: { link: staffUrl }
+        },
+        data: {
+          kind: "question",
+          questionId,
+          link: staffUrl
+        }
+      });
+    } catch (pushError) {
+      console.error("Staff push notification failed", pushError);
+    }
+
     await questionRef.update({
       staffNotifiedAt: new Date(),
+      staffPushMessageId: pushMessageId || null,
       staffNotificationPendingAt: FieldValue.delete(),
       staffNotificationLastFailedAt: FieldValue.delete()
     });
 
-    return json(200, { ok: true, id: result.id || null });
+    return json(200, { ok: true, id: result.id || null, pushMessageId });
   } catch (error) {
     if (claimed && questionRef) {
       try {
