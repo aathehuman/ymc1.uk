@@ -145,10 +145,11 @@ function buildPushCard() {
       <span class="staff-card-icon"><i class="fa-solid fa-bell"></i></span>
       <div>
         <h3>Send notification</h3>
-        <p>Send an important push notification to devices that have enabled YMC notifications.</p>
+        <p>Send an important push notification to public devices or staff devices only.</p>
       </div>
     </div>
     <form class="staff-form" data-push-form>
+      <label>Audience<select name="audience"><option value="public">Public YMC subscribers</option><option value="staff">Staff only</option></select></label>
       <label>Title<input name="title" maxlength="80" placeholder="Important YMC update" required></label>
       <label>Message<textarea name="message" maxlength="240" placeholder="Write the notification message…" required></textarea></label>
       <label>Open when tapped<input name="link" maxlength="300" value="/" placeholder="/events.html"></label>
@@ -163,6 +164,12 @@ function buildPushCard() {
 
   const form = card.querySelector("[data-push-form]");
   const status = card.querySelector("[data-push-status]");
+  const audienceField = form.elements.namedItem("audience");
+  const linkField = form.elements.namedItem("link");
+
+  audienceField.addEventListener("change", () => {
+    linkField.value = audienceField.value === "staff" ? "/staff/" : "/";
+  });
 
   form.addEventListener("submit", async event => {
     event.preventDefault();
@@ -174,6 +181,7 @@ function buildPushCard() {
 
     const data = new FormData(form);
     const payload = {
+      audience: String(data.get("audience") || "public"),
       title: String(data.get("title") || "").trim(),
       message: String(data.get("message") || "").trim(),
       link: String(data.get("link") || "/").trim() || "/"
@@ -196,8 +204,11 @@ function buildPushCard() {
       const result = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(result.error || "The notification could not be sent.");
 
-      status.textContent = "Notification sent to subscribed devices.";
+      status.textContent = result.audience === "staff"
+        ? "Notification sent to staff subscribers."
+        : "Notification sent to public subscribers.";
       form.reset();
+      form.elements.namedItem("audience").value = "public";
       form.elements.namedItem("link").value = "/";
 
       try {
@@ -205,7 +216,7 @@ function buildPushCard() {
           "notification.send",
           "push-notification",
           result.messageId || "",
-          `Sent notification: ${payload.title}`
+          `Sent ${result.audience || payload.audience} notification: ${payload.title}`
         );
       } catch (error) {
         console.warn("Could not record notification in the audit log", error);
