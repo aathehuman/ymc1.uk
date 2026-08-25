@@ -21,8 +21,8 @@ messaging.onBackgroundMessage(payload => {
   const data = payload.data || {};
   self.registration.showNotification(data.title || "Yardley Muslim Centre", {
     body: data.body || "There is a new update from YMC.",
-    icon: "/assets/favicons/android-chrome-192x192.png",
-    badge: "/assets/favicons/favicon-32x32.png",
+    icon: "/assets/favicons/main/android-chrome-192x192.png",
+    badge: "/assets/favicons/main/favicon-32x32.png",
     data: { link: data.link || "/" }
   });
 });
