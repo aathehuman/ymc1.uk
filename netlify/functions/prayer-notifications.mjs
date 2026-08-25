@@ -115,8 +115,8 @@ async function sendOnce({ db, id, title, body, data = {} }) {
       notification: { title, body },
       webpush: {
         notification: {
-          icon: `${SITE_ORIGIN}/assets/favicons/android-chrome-192x192.png`,
-          badge: `${SITE_ORIGIN}/assets/favicons/favicon-32x32.png`
+          icon: `${SITE_ORIGIN}/assets/favicons/main/android-chrome-192x192.png`,
+          badge: `${SITE_ORIGIN}/assets/favicons/main/favicon-32x32.png`
         },
         fcmOptions: { link: `${SITE_ORIGIN}/prayer.html` }
       },
