@@ -111,7 +111,7 @@ function renderSharedLayout() {
     )).join("");
 
     oldNav.outerHTML = `<nav class="navbar" aria-label="Main navigation"><div class="nav-container">
-      <a href="/" class="nav-logo"><img class="logo-img" src="/assets/logos/edited-logo-notext.png" alt=""><div class="nav-logo-text"><span class="logo-text">YMC.</span><span class="logo-subtext">Yardley Muslim Centre.</span></div></a>
+      <a href="/" class="nav-logo"><img class="logo-img" src="/assets/logos/edited-logo-notext.png" alt=""><div class="nav-logo-text"><span class="logo-text" style="font-size:clamp(16px,2vw,20px)">Yardley Muslim Centre</span><span class="logo-subtext">Birmingham</span></div></a>
       <ul class="nav-menu" id="navMenu">${navLinks}<li><a href="/donate.html" class="nav-donate${page === "donate" ? " active" : ""}"><i class="fas fa-heart" aria-hidden="true"></i> Donate</a></li></ul>
       <button class="hamburger" id="hamburger" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="navMenu"><span></span><span></span><span></span></button>
     </div></nav>`;
