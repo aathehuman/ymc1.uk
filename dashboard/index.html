@@ -7,7 +7,7 @@
 <style>
 @font-face {
   font-family: "DMSerifDisplay";
-  src: url("/assets/fonts/DMSerifDisplay.ttf") format("truetype");
+  src: url("./assets/fonts/DMSerifDisplay.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -399,7 +399,8 @@ body::before {
   opacity: 1;
 }
 
-.slide img {
+.slide img,
+.slide video {
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -641,7 +642,7 @@ body::before {
 <div class="dashboard">
   <header class="header">
     <div class="logo-section">
-      <img class="logo" src="/assets/logos/edited-logo-notext.png" alt="">
+      <img class="logo" src="./assets/logos/edited-logo-notext.png" alt="">
       <h1 class="mosque-name">Yardley Muslim Centre.</h1>
     </div>
     <div></div>
@@ -672,12 +673,12 @@ body::before {
 
       <div class="qr-section">
         <div class="qr-card">
-          <div class="qr-image"><img src="/assets/qr-codes/launchgood.png" alt="Donate QR code"></div>
+          <div class="qr-image"><img src="./assets/qr-codes/launchgood.png" alt="Donate QR code"></div>
           <div class="qr-label">Donate</div>
           <div class="qr-sublabel">Support your local mosque.</div>
         </div>
         <div class="qr-card">
-          <div class="qr-image"><img src="/assets/qr-codes/website.png" alt="Website QR code"></div>
+          <div class="qr-image"><img src="./assets/qr-codes/website.png" alt="Website QR code"></div>
           <div class="qr-label">Website</div>
           <div class="qr-sublabel">Get our info on the go.</div>
         </div>
@@ -722,22 +723,23 @@ body::before {
   </div>
 </div>
 
-<script type="module">
-import { PRAYER_DATA } from "/prayer-data.js";
+<script src="./prayer-data.js"></script>
+<script>
+const PRAYER_DATA = window.PRAYER_DATA || [];
 
 const TIME_ZONE = "Europe/London";
 const CONFIG = {
   adverts: [
-    "/assets/adverts/1.jpg",
-    "/assets/adverts/2.jpg",
-    "/assets/adverts/3.jpg",
-    "/assets/adverts/4.jpg",
-    "/assets/adverts/5.jpg",
-    "/assets/adverts/6.jpg",
-    "/assets/adverts/7.jpg",
-    "/assets/adverts/8.jpg",
-    "/assets/adverts/9.jpg",
-    "/assets/adverts/10.jpg"
+    "./assets/adverts/1.jpg",
+    "./assets/adverts/2.jpg",
+    "./assets/adverts/3.jpg",
+    "./assets/adverts/4.jpg",
+    "./assets/adverts/5.jpg",
+    "./assets/adverts/6.jpg",
+    "./assets/adverts/7.jpg",
+    "./assets/adverts/8.jpg",
+    "./assets/adverts/9.jpg",
+    "./assets/adverts/10.jpg"
   ],
   slideDuration: 10000,
   announcementDuration: 10000,
@@ -989,22 +991,27 @@ function updatePrayerMode() {
   }
 }
 
-function preloadImage(src) {
+function preloadMedia(src) {
+  const isVideo = /\.(mp4|webm)$/i.test(src);
   return new Promise(resolve => {
-    const image = new Image();
-    image.onload = () => resolve(src);
-    image.onerror = () => {
-      addError(`Image not found: ${src}`);
+    const element = document.createElement(isVideo ? "video" : "img");
+    if (isVideo) {
+      element.muted = true;
+      element.preload = "metadata";
+    }
+    element.onload = element.onloadedmetadata = () => resolve(src);
+    element.onerror = () => {
+      addError(`Media not found: ${src}`);
       resolve(null);
     };
-    image.src = src;
+    element.src = src;
   });
 }
 
 async function initSlideshow() {
   const slideshow = document.getElementById("slideshow");
   const indicators = document.getElementById("indicators");
-  const checked = await Promise.all(CONFIG.adverts.map(preloadImage));
+  const checked = await Promise.all(CONFIG.adverts.map(preloadMedia));
   const valid = checked.filter(Boolean);
 
   if (!valid.length) {
@@ -1012,11 +1019,12 @@ async function initSlideshow() {
     return;
   }
 
-  slideshow.innerHTML = valid.map((src, index) => `
-    <div class="slide${index === 0 ? " active" : ""}">
-      <img src="${src}" alt="YMC notice ${index + 1}">
-    </div>
-  `).join("");
+  slideshow.innerHTML = valid.map((src, index) => {
+    const inner = /\.(mp4|webm)$/i.test(src)
+      ? `<video src="${src}" muted autoplay loop playsinline></video>`
+      : `<img src="${src}" alt="YMC notice ${index + 1}">`;
+    return `<div class="slide${index === 0 ? " active" : ""}">${inner}</div>`;
+  }).join("");
 
   indicators.innerHTML = valid.map((_, index) =>
     `<span class="indicator${index === 0 ? " active" : ""}"></span>`
@@ -1037,6 +1045,16 @@ function nextSlide() {
   currentSlide = (currentSlide + 1) % slideElements.length;
   slideElements[currentSlide].classList.add("active");
   indicators[currentSlide]?.classList.add("active");
+
+  slideElements.forEach((slide, index) => {
+    const video = slide.querySelector("video");
+    if (!video) return;
+    if (index === currentSlide) {
+      video.play().catch(() => {});
+    } else {
+      video.pause();
+    }
+  });
 }
 
 function initAnnouncements() {
@@ -1102,6 +1120,10 @@ function initCursorHider() {
 }
 
 function init() {
+  if (!Array.isArray(window.PRAYER_DATA) || !window.PRAYER_DATA.length) {
+    addError("prayer-data.js missing, empty or invalid — prayer times unavailable");
+  }
+
   updateClock();
   updateDates();
   loadTodaysPrayers();
@@ -1124,6 +1146,14 @@ function init() {
       loadTodaysPrayers();
     }
   }, 30000);
+
+  (function scheduleNightlyReload() {
+    const now = new Date();
+    const next = new Date(now);
+    next.setHours(3, 5, 0, 0);
+    if (next <= now) next.setDate(next.getDate() + 1);
+    window.setTimeout(() => window.location.reload(), next - now);
+  })();
 }
 
 init();
