@@ -18,6 +18,12 @@
 
     if (period === "pm" && hour < 12) hour += 12;
     if (period === "am" && hour === 12) hour = 0;
+
+    // Weekly programme times such as "6:15 (Asr)" are displayed without
+    // AM/PM. Treat an unqualified evening-looking time as PM so it sorts
+    // after the afternoon classes (e.g. 2–3 and 3–4).
+    if (!period && hour >= 5 && hour <= 11) hour += 12;
+
     return hour * 60 + minute;
   }
 
