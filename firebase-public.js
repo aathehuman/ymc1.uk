@@ -33,8 +33,7 @@ function toMillis(value) {
   return Number.isNaN(parsed) ? Number.MAX_SAFE_INTEGER : parsed;
 }
 
-function regularEventDayRank(item) {
-  const weekdayOrder = ["friday", "saturday", "sunday", "monday", "tuesday", "wednesday", "thursday"];
+function regularEventSortKey(item) {
   const searchable = [
     item.day,
     item.weekday,
@@ -47,8 +46,53 @@ function regularEventDayRank(item) {
     .join(" ")
     .toLowerCase();
 
-  const index = weekdayOrder.findIndex(day => searchable.includes(day) || searchable.includes(day.slice(0, 3)));
-  return index === -1 ? weekdayOrder.length : index;
+  const weekdayOrder = ["friday", "saturday", "sunday", "monday", "tuesday", "wednesday", "thursday"];
+  const dayRank = weekdayOrder.findIndex(day => searchable.includes(day) || searchable.includes(day.slice(0, 3)));
+  const safeDayRank = dayRank === -1 ? weekdayOrder.length : dayRank;
+
+  // Prefer an explicit time field if the event has one.
+  const explicitTime = String(item.startTime || item.time || "").trim().toLowerCase();
+  const timeText = explicitTime || searchable;
+  const matches = [...timeText.matchAll(/\b(\d{1,2})(?::(\d{2}))?\s*(am|pm)?\b/g)];
+
+  let minutes = Number.MAX_SAFE_INTEGER;
+  if (matches.length) {
+    // Use the last time-looking value so a programme description containing
+    // another number does not accidentally become the sort time.
+    const match = matches[matches.length - 1];
+    let hour = Number(match[1]);
+    const minute = Number(match[2] || 0);
+    const period = match[3];
+
+    if (period === "pm" && hour < 12) hour += 12;
+    if (period === "am" && hour === 12) hour = 0;
+    if (!period && hour >= 5 && hour <= 11) hour += 12;
+
+    minutes = hour * 60 + minute;
+  }
+
+  // Keep the known weekly programme order deterministic even when an older
+  // Firestore record has an inconsistent startAt value.
+  const title = String(item.title || "").toLowerCase();
+  const knownOrder = [
+    ["halaqah", 0],
+    ["tuition", 1],
+    ["karate", 2],
+    ["community football", 3]
+  ];
+  const knownIndex = knownOrder.findIndex(([name]) => title.includes(name));
+  const programmeRank = knownIndex === -1 ? 99 : knownIndex;
+
+  return [safeDayRank, programmeRank, minutes, toMillis(item.startAt)];
+}
+
+function compareRegularEvents(a, b) {
+  const aKey = regularEventSortKey(a);
+  const bKey = regularEventSortKey(b);
+  for (let i = 0; i < aKey.length; i += 1) {
+    if (aKey[i] !== bKey[i]) return aKey[i] - bKey[i];
+  }
+  return 0;
 }
 
 function safeLink(link, url, label) {
@@ -176,11 +220,7 @@ async function renderEvents() {
 
   const regular = events
     .filter(item => item.type === "regular")
-    .sort((a, b) => {
-      const dayDifference = regularEventDayRank(a) - regularEventDayRank(b);
-      if (dayDifference !== 0) return dayDifference;
-      return toMillis(a.startAt) - toMillis(b.startAt);
-    });
+    .sort(compareRegularEvents);
   const special = events.filter(item => item.type !== "regular");
 
   if (regularGrid && regular.length) {
