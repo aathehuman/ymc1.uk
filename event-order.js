@@ -28,8 +28,9 @@
     const cards = [...grid.querySelectorAll(".event-card")];
     if (cards.length < 2) return;
 
-    cards.sort((a, b) => dayRank(a) - dayRank(b) || timeRank(a) - timeRank(b));
-    grid.replaceChildren(...cards);
+    const sorted = [...cards].sort((a, b) => dayRank(a) - dayRank(b) || timeRank(a) - timeRank(b));
+    const changed = sorted.some((card, index) => card !== cards[index]);
+    if (changed) grid.replaceChildren(...sorted);
   }
 
   function init() {
