@@ -1,6 +1,7 @@
 import { app, auth } from "../firebase.js";
 import { webPushConfig } from "../firebase-config.js";
 import {
+  deleteToken,
   getMessaging,
   getToken,
   isSupported
@@ -21,7 +22,17 @@ function ensureStaffManifest() {
 }
 
 async function getRegistration() {
-  return navigator.serviceWorker.register("/firebase-messaging-sw.js", { scope: "/" });
+  const registration = await navigator.serviceWorker.register("/firebase-messaging-sw.js", { scope: "/" });
+  await registration.update().catch(() => {});
+  return registration;
+}
+
+async function getCurrentToken(messaging) {
+  const serviceWorkerRegistration = await getRegistration();
+  return getToken(messaging, {
+    vapidKey: webPushConfig.vapidKey,
+    serviceWorkerRegistration
+  });
 }
 
 async function postStaffSubscription(token, action) {
@@ -38,6 +49,7 @@ async function postStaffSubscription(token, action) {
   });
   const result = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(result.error || "Could not update staff notifications.");
+  return result;
 }
 
 function buildStaffSubscriptionCard() {
@@ -94,9 +106,33 @@ async function initStaffSubscriptionCard() {
     status.textContent = button.dataset.enabled === "true" ? "Disabling…" : "Enabling…";
 
     try {
+      const messaging = getMessaging(app);
+
       if (button.dataset.enabled === "true") {
-        const token = localStorage.getItem(STAFF_TOKEN_KEY);
-        if (token) await postStaffSubscription(token, "unsubscribe");
+        const storedToken = localStorage.getItem(STAFF_TOKEN_KEY);
+        let currentToken = null;
+
+        try {
+          currentToken = await getCurrentToken(messaging);
+        } catch (error) {
+          console.warn("Could not retrieve the current staff notification token:", error);
+        }
+
+        const tokens = [...new Set([storedToken, currentToken].filter(Boolean))];
+        for (const token of tokens) {
+          try {
+            await postStaffSubscription(token, "unsubscribe");
+          } catch (error) {
+            console.warn("Could not unsubscribe staff notification token:", error);
+          }
+        }
+
+        try {
+          await deleteToken(messaging);
+        } catch (error) {
+          console.warn("Could not delete the local Firebase messaging token:", error);
+        }
+
         localStorage.removeItem(STAFF_TOKEN_KEY);
         localStorage.removeItem(STAFF_ENABLED_KEY);
         button.textContent = "Enable staff notifications";
@@ -110,12 +146,7 @@ async function initStaffSubscriptionCard() {
       if (permission !== "granted") throw new Error("Notifications are blocked for the Staff Portal on this device.");
       if (!webPushConfig?.vapidKey || webPushConfig.vapidKey.startsWith("PASTE_")) throw new Error("Web push is not fully configured yet.");
 
-      const serviceWorkerRegistration = await getRegistration();
-      const messaging = getMessaging(app);
-      const token = await getToken(messaging, {
-        vapidKey: webPushConfig.vapidKey,
-        serviceWorkerRegistration
-      });
+      const token = await getCurrentToken(messaging);
       if (!token) throw new Error("Firebase did not return a messaging token.");
 
       await postStaffSubscription(token, "subscribe");
@@ -136,7 +167,7 @@ async function initStaffSubscriptionCard() {
 
 function buildPushCard() {
   const view = document.querySelector('[data-view="content"]');
-  if (!view || view.querySelector('[data-push-form]')) return;
+  if (!view || view.querySelector("[data-push-form]")) return;
 
   const card = document.createElement("section");
   card.className = "staff-card staff-admin-card";
