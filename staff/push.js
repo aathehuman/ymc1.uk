@@ -52,6 +52,23 @@ async function postStaffSubscription(token, action) {
   return result;
 }
 
+async function testCurrentDevice() {
+  const user = auth?.currentUser;
+  if (!user) throw new Error("Sign in again before testing notifications.");
+  const messaging = getMessaging(app);
+  const token = await getCurrentToken(messaging);
+  if (!token) throw new Error("Firebase did not return a messaging token.");
+  const idToken = await user.getIdToken();
+  const response = await fetch("/.netlify/functions/test-push", {
+    method: "POST",
+    headers: { "content-type": "application/json", authorization: `Bearer ${idToken}` },
+    body: JSON.stringify({ token })
+  });
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(result.error || "The test notification could not be sent.");
+  return result;
+}
+
 function buildStaffSubscriptionCard() {
   const view = document.querySelector('[data-view="home"]');
   if (!view || view.querySelector("[data-staff-push-card]")) return null;
@@ -69,7 +86,7 @@ function buildStaffSubscriptionCard() {
       </div>
     </div>
     <div class="staff-heading-actions">
-      <button class="btn-outline" type="button" data-staff-push-button>Enable staff notifications</button>
+      <button class="btn-outline" type="button" data-staff-push-button>Enable staff notifications</button><button class="btn-outline" type="button" data-staff-push-test>Test this device</button>
     </div>
     <p class="staff-status" data-staff-push-status aria-live="polite"></p>
   `;
@@ -89,12 +106,27 @@ async function initStaffSubscriptionCard() {
   const button = card.querySelector("[data-staff-push-button]");
   const copy = card.querySelector("[data-staff-push-copy]");
   const status = card.querySelector("[data-staff-push-status]");
+  const testButton = card.querySelector("[data-staff-push-test]");
 
   if (localStorage.getItem(STAFF_ENABLED_KEY) === "1" && Notification.permission === "granted") {
     button.textContent = "Disable staff notifications";
     button.dataset.enabled = "true";
     copy.textContent = "Staff-only alerts can reach this device.";
   }
+
+  testButton.addEventListener("click", async () => {
+    testButton.disabled = true;
+    status.textContent = "Sending a direct test to this device…";
+    try {
+      const result = await testCurrentDevice();
+      status.textContent = result.ok ? "Direct test sent. If it does not appear, the problem is after Firebase token registration (browser/device delivery)." : "Test did not complete.";
+    } catch (error) {
+      console.error("Could not test push notification:", error);
+      status.textContent = error.message || "The direct test could not be sent.";
+    } finally {
+      testButton.disabled = false;
+    }
+  });
 
   button.addEventListener("click", async () => {
     if (IOS && !STANDALONE) {
