@@ -52,9 +52,26 @@ export async function handler(event) {
       : await messaging.unsubscribeFromTopic([cleanToken], topic);
 
     if (result.failureCount > 0) {
-      const error = new Error("Firebase rejected this notification subscription.");
-      error.statusCode = 400;
-      throw error;
+      const failure = result.errors?.[0];
+      const code = failure?.errorInfo?.code || failure?.code || "";
+
+      // During unsubscribe, an already-invalid/unregistered token means there
+      // is nothing left to remove from the topic. Treat it as an idempotent
+      // success so clients can still clear their local subscription state.
+      const tokenAlreadyGone = action === "unsubscribe" && [
+        "messaging/registration-token-not-registered",
+        "messaging/invalid-registration-token"
+      ].includes(code);
+
+      if (!tokenAlreadyGone) {
+        const error = new Error(
+          action === "subscribe"
+            ? "Firebase rejected this notification subscription."
+            : "Firebase could not remove this notification subscription."
+        );
+        error.statusCode = 400;
+        throw error;
+      }
     }
 
     return json(200, {
