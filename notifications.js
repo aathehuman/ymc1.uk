@@ -23,7 +23,7 @@ function makePanel() {
         <p data-push-copy>Get important mosque announcements on this device.</p>
       </div>
     </div>
-    <button class="btn-outline push-panel-button" type="button" data-push-button>Enable notifications</button>
+    <div class="push-panel-actions"><button class="btn-outline push-panel-button" type="button" data-push-button>Enable notifications</button><button class="btn-outline" type="button" data-push-diagnostics>Check device</button></div>\n    <p class="push-panel-status" data-push-diagnostics-status aria-live="polite"></p>
   `;
 
   const announcements = document.querySelector("[data-firebase-announcements]");
@@ -142,17 +142,47 @@ async function unsubscribe(button, copy) {
   }
 }
 
+async function runDiagnostics() {
+  const details = [];
+  details.push(`Permission: ${Notification.permission}`);
+  details.push(`Standalone: ${STANDALONE ? "yes" : "no"}`);
+  try {
+    const registration = await getRegistration();
+    details.push(`Service worker: ${registration.active?.state || "not active"}`);
+    const messaging = getMessaging(app);
+    const token = await getCurrentToken(messaging);
+    details.push(`FCM token: ${token ? `received (${token.slice(-8)})` : "missing"}`);
+  } catch (error) {
+    details.push(`FCM/service worker error: ${error.message || error}`);
+  }
+  return details;
+}
+
 async function init() {
   if (!app || !("Notification" in window) || !("serviceWorker" in navigator) || !(await isSupported())) return;
   const panel = makePanel();
   const button = panel.querySelector("[data-push-button]");
   const copy = panel.querySelector("[data-push-copy]");
+  const diagnosticsButton = panel.querySelector("[data-push-diagnostics]");
+  const diagnosticsStatus = panel.querySelector("[data-push-diagnostics-status]");
 
   if (localStorage.getItem(ENABLED_KEY) === "1" && Notification.permission === "granted") {
     button.textContent = "Disable notifications";
     button.dataset.enabled = "true";
     copy.textContent = "Important YMC announcements can reach this device.";
   }
+
+  diagnosticsButton.addEventListener("click", async () => {
+    diagnosticsButton.disabled = true;
+    diagnosticsStatus.textContent = "Checking this device…";
+    try {
+      diagnosticsStatus.textContent = (await runDiagnostics()).join(" • ");
+    } catch (error) {
+      diagnosticsStatus.textContent = error.message || "Diagnostic failed.";
+    } finally {
+      diagnosticsButton.disabled = false;
+    }
+  });
 
   button.addEventListener("click", () => {
     if (button.dataset.enabled === "true") unsubscribe(button, copy);
