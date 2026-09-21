@@ -12,15 +12,15 @@ export async function handler(event) {
 
     const messageId = await getAdminMessaging().send({
       token,
-      notification: { title: "YMC device test", body: "Direct push delivery to this device is working." },
       webpush: {
-        notification: {
-          icon: "https://ymc1.uk/assets/favicons/staff/android-chrome-192x192.png",
-          badge: "https://ymc1.uk/assets/favicons/staff/favicon-32x32.png"
-        },
-        fcmOptions: { link: "https://ymc1.uk/staff/" }
+        headers: { TTL: "300" }
       },
-      data: { type: "device-test", link: "/staff/" }
+      data: {
+        type: "device-test",
+        title: "YMC device test",
+        body: "Direct push delivery to this device is working.",
+        link: "/staff/"
+      }
     });
 
     return json(200, { ok: true, messageId });
