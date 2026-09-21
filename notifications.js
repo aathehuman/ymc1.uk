@@ -9,6 +9,8 @@ import {
 
 const IOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
 const STANDALONE = window.matchMedia?.("(display-mode: standalone)")?.matches || window.navigator.standalone === true;
+const TOKEN_KEY = "ymcPushToken";
+const ENABLED_KEY = "ymcPushEnabled";
 
 function makePanel() {
   const panel = document.createElement("section");
@@ -42,7 +44,9 @@ async function postSubscription(token, action) {
 }
 
 async function getRegistration() {
-  return navigator.serviceWorker.register("/firebase-messaging-sw.js", { scope: "/" });
+  const registration = await navigator.serviceWorker.register("/firebase-messaging-sw.js", { scope: "/" });
+  await registration.update().catch(() => {});
+  return registration;
 }
 
 async function getCurrentToken(messaging) {
@@ -51,6 +55,15 @@ async function getCurrentToken(messaging) {
     vapidKey: webPushConfig.vapidKey,
     serviceWorkerRegistration
   });
+}
+
+async function getUsableToken(messaging) {
+  try {
+    return await getCurrentToken(messaging);
+  } catch (error) {
+    console.warn("Could not retrieve the current YMC notification token:", error);
+    return null;
+  }
 }
 
 async function subscribe(button, copy) {
@@ -79,8 +92,8 @@ async function subscribe(button, copy) {
     if (!token) throw new Error("Firebase did not return a messaging token.");
 
     await postSubscription(token, "subscribe");
-    localStorage.setItem("ymcPushToken", token);
-    localStorage.setItem("ymcPushEnabled", "1");
+    localStorage.setItem(TOKEN_KEY, token);
+    localStorage.setItem(ENABLED_KEY, "1");
     button.textContent = "Disable notifications";
     button.dataset.enabled = "true";
     copy.textContent = "Important YMC announcements can now reach this device even when the website is closed.";
@@ -98,23 +111,14 @@ async function unsubscribe(button, copy) {
 
   try {
     const messaging = getMessaging(app);
-    const storedToken = localStorage.getItem("ymcPushToken");
-    let currentToken = null;
-
-    try {
-      currentToken = await getCurrentToken(messaging);
-    } catch (error) {
-      console.warn("Could not retrieve the current YMC notification token:", error);
-    }
-
+    const storedToken = localStorage.getItem(TOKEN_KEY);
+    const currentToken = await getUsableToken(messaging);
     const tokens = [...new Set([storedToken, currentToken].filter(Boolean))];
 
     for (const token of tokens) {
       try {
         await postSubscription(token, "unsubscribe");
       } catch (error) {
-        // A stale/unregistered token is already unusable. Continue cleaning
-        // up this browser instead of leaving the UI stuck in the enabled state.
         console.warn("Could not unsubscribe YMC notification token:", error);
       }
     }
@@ -125,8 +129,8 @@ async function unsubscribe(button, copy) {
       console.warn("Could not delete the local Firebase messaging token:", error);
     }
 
-    localStorage.removeItem("ymcPushToken");
-    localStorage.removeItem("ymcPushEnabled");
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(ENABLED_KEY);
     button.textContent = "Enable notifications";
     button.dataset.enabled = "false";
     copy.textContent = "Get important mosque announcements on this device.";
@@ -144,7 +148,7 @@ async function init() {
   const button = panel.querySelector("[data-push-button]");
   const copy = panel.querySelector("[data-push-copy]");
 
-  if (localStorage.getItem("ymcPushEnabled") === "1" && Notification.permission === "granted") {
+  if (localStorage.getItem(ENABLED_KEY) === "1" && Notification.permission === "granted") {
     button.textContent = "Disable notifications";
     button.dataset.enabled = "true";
     copy.textContent = "Important YMC announcements can reach this device.";
