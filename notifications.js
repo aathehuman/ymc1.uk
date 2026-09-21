@@ -36,11 +36,21 @@ async function postSubscription(token, action) {
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ token, action })
   });
-  if (!response.ok) throw new Error("Could not update notification subscription.");
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(result.error || "Could not update notification subscription.");
+  return result;
 }
 
 async function getRegistration() {
   return navigator.serviceWorker.register("/firebase-messaging-sw.js", { scope: "/" });
+}
+
+async function getCurrentToken(messaging) {
+  const serviceWorkerRegistration = await getRegistration();
+  return getToken(messaging, {
+    vapidKey: webPushConfig.vapidKey,
+    serviceWorkerRegistration
+  });
 }
 
 async function subscribe(button, copy) {
@@ -64,12 +74,8 @@ async function subscribe(button, copy) {
       return;
     }
 
-    const serviceWorkerRegistration = await getRegistration();
     const messaging = getMessaging(app);
-    const token = await getToken(messaging, {
-      vapidKey: webPushConfig.vapidKey,
-      serviceWorkerRegistration
-    });
+    const token = await getCurrentToken(messaging);
     if (!token) throw new Error("Firebase did not return a messaging token.");
 
     await postSubscription(token, "subscribe");
@@ -89,11 +95,36 @@ async function subscribe(button, copy) {
 async function unsubscribe(button, copy) {
   button.disabled = true;
   copy.textContent = "Disabling notifications…";
+
   try {
     const messaging = getMessaging(app);
-    const token = localStorage.getItem("ymcPushToken");
-    if (token) await postSubscription(token, "unsubscribe");
-    await deleteToken(messaging).catch(() => false);
+    const storedToken = localStorage.getItem("ymcPushToken");
+    let currentToken = null;
+
+    try {
+      currentToken = await getCurrentToken(messaging);
+    } catch (error) {
+      console.warn("Could not retrieve the current YMC notification token:", error);
+    }
+
+    const tokens = [...new Set([storedToken, currentToken].filter(Boolean))];
+
+    for (const token of tokens) {
+      try {
+        await postSubscription(token, "unsubscribe");
+      } catch (error) {
+        // A stale/unregistered token is already unusable. Continue cleaning
+        // up this browser instead of leaving the UI stuck in the enabled state.
+        console.warn("Could not unsubscribe YMC notification token:", error);
+      }
+    }
+
+    try {
+      await deleteToken(messaging);
+    } catch (error) {
+      console.warn("Could not delete the local Firebase messaging token:", error);
+    }
+
     localStorage.removeItem("ymcPushToken");
     localStorage.removeItem("ymcPushEnabled");
     button.textContent = "Enable notifications";
