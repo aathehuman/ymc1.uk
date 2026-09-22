@@ -370,15 +370,21 @@ function initContactForm() {
   const form = document.getElementById("contactForm");
   if (!form) return;
 
+  const result = form.querySelector("[data-form-result]");
+
   form.addEventListener("submit", async event => {
     event.preventDefault();
 
-    const button = form.querySelector('button[type="submit"]');
-    const success = document.getElementById("form-success");
-    const error = document.getElementById("form-error");
+    if (form.elements.website && form.elements.website.value) {
+      form.reset();
+      return;
+    }
 
+    const button = form.querySelector('button[type="submit"]');
     button.textContent = "Sending...";
     button.disabled = true;
+    result.textContent = "";
+    result.style.color = "";
 
     try {
       const response = await fetch(form.action, {
@@ -388,14 +394,16 @@ function initContactForm() {
       });
 
       if (response.ok) {
-        success.style.display = "block";
-        error.style.display = "none";
+        result.textContent = "Message sent! We will get back to you soon, InShaaAllah.";
+        result.style.color = "var(--green-bright)";
         form.reset();
       } else {
-        error.style.display = "block";
+        result.textContent = "Something went wrong. Please try again or email us directly.";
+        result.style.color = "#ff4a4a";
       }
     } catch {
-      error.style.display = "block";
+      result.textContent = "Something went wrong. Please try again or email us directly.";
+      result.style.color = "#ff4a4a";
     } finally {
       button.textContent = "Send Message";
       button.disabled = false;
