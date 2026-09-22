@@ -1,202 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Adult Alim Course | Yardley Muslim Centre</title>
-<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicons/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicons/favicon-32x32.png">
-<link rel="manifest" href="/site.webmanifest">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<link rel="stylesheet" href="/styles.css">
-<style>
-  /* styles.css only gives <select> colours, not size — match it to the inputs */
-  .form-group select {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    background: #091321;
-    color: var(--text-primary);
-    font-family: var(--font-sans);
-    font-size: 14px;
-  }
-  .form-group select option { background: var(--bg-secondary); color: var(--text-primary); }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adult Alim Course | Yardley Muslim Centre</title>
+  <meta name="description" content="Register your interest in the adult alim course at Yardley Muslim Centre.">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicons/favicon-32x32.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/firebase-ui.css">
 </head>
 <body>
-<nav class="navbar"></nav>
+  <nav class="navbar"></nav>
 
-<section class="page-header">
-  <div class="container">
-    <!-- EDIT: course title/subtitle -->
-    <h1>Adult Alim Course</h1>
-    <p>Structured Islamic studies for adults — learn the deen, step by step.</p>
-  </div>
-</section>
-
-<section class="section">
-  <div class="container contact-container">
-
-    <div class="contact-info">
-      <h2>About the Course</h2>
-      <!-- EDIT: course description -->
-      <p style="color:var(--text-secondary);margin-bottom:25px;">A part-time ʿĀlim course designed for working adults and students. Study the classical Islamic sciences at a manageable pace, taught in English, right here at YMC.</p>
-
-      <div class="info-item">
-        <span class="info-icon"><i class="fas fa-book-open"></i></span>
-        <div>
-          <h4>What You'll Study</h4>
-          <p>Arabic grammar, fiqh, aqidah, seerah, hadith and tafsir — taught from the foundations, no prior knowledge required.</p>
-        </div>
-      </div>
-
-      <div class="info-item">
-        <span class="info-icon"><i class="fas fa-clock"></i></span>
-        <div>
-          <h4>Class Times</h4>
-          <!-- EDIT: real days and times -->
-          <p>[e.g. Every Tuesday &amp; Thursday, 7:00pm – 9:00pm]</p>
-        </div>
-      </div>
-
-      <div class="info-item">
-        <span class="info-icon"><i class="fas fa-user-group"></i></span>
-        <div>
-          <h4>Who It's For</h4>
-          <p>Adults of all ages and backgrounds. Whether you studied at madrasah as a child or are starting completely fresh, you're welcome.</p>
-        </div>
-      </div>
-
-      <div class="info-item">
-        <span class="info-icon"><i class="fas fa-location-dot"></i></span>
-        <div>
-          <h4>Where</h4>
-          <p>Yardley Muslim Centre<br>47-51 Stoney Lane, Birmingham, B25 8RE</p>
-        </div>
-      </div>
-
-      <div class="info-item">
-        <span class="info-icon"><i class="fas fa-envelope"></i></span>
-        <div>
-          <h4>Questions?</h4>
-          <p><a href="mailto:info@ymc1.uk" class="footer-link">info@ymc1.uk</a></p>
-        </div>
-      </div>
+  <section class="page-header service-page-header">
+    <div class="container">
+      <a class="service-back-link" href="/services/"><i class="fas fa-arrow-left" aria-hidden="true"></i> All services</a>
+      <div class="service-header-icon"><i class="fas fa-book-quran" aria-hidden="true"></i></div>
+      <h1>Adult Alim Course</h1>
+      <p>Structured Islamic studies for adults — learn the deen, step by step.</p>
     </div>
+  </section>
 
-    <div class="contact-form-wrapper">
-      <h2>Register Your Interest</h2>
-      <form class="contact-form" id="signupForm" name="alim-course-signup" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-        <input type="hidden" name="form-name" value="alim-course-signup">
-        <p style="display:none"><label>Don't fill this out: <input name="bot-field"></label></p>
+  <main class="section">
+    <div class="container qa-layout">
 
-        <div class="form-group">
-          <label for="full-name">Full Name</label>
-          <input type="text" id="full-name" name="Full Name" placeholder="Your Name" required>
+      <section class="qa-panel">
+        <h2>About the course</h2>
+        <p>A part-time ʿĀlim course designed for working adults and students. Study the classical Islamic sciences at a manageable pace, taught in English, right here at YMC.</p>
+
+        <div class="service-info-grid" style="margin-top:20px">
+          <article class="service-info-card"><i class="fas fa-book-quran" aria-hidden="true"></i><h3>What you'll study</h3><p>Arabic grammar, fiqh, aqidah, seerah, hadith and tafsir — taught from the foundations, with no prior knowledge required.</p></article>
+          <article class="service-info-card"><i class="fas fa-user-group" aria-hidden="true"></i><h3>Who it's for</h3><p>Adults of all ages and backgrounds. Whether you attended madrasah as a child or are starting completely fresh, you are welcome.</p></article>
+          <article class="service-info-card"><i class="fas fa-clock" aria-hidden="true"></i><h3>Timings</h3><p><!-- EDIT -->Classes run twice weekly in the evening. Final days and times will be confirmed with everyone who registers.</p></article>
+          <article class="service-info-card"><i class="fas fa-location-dot" aria-hidden="true"></i><h3>Where</h3><p>Yardley Muslim Centre, 47-51 Stoney Lane, Birmingham, B25 8RE.</p></article>
         </div>
 
-        <div class="form-group">
-          <label for="email">Email Address</label>
-          <input type="email" id="email" name="Email" placeholder="yourname@example.com" required>
+        <div class="guide-note" style="margin-top:20px">
+          <strong>Please note:</strong> Submitting this form registers your interest and helps us plan classes around those who want to attend. It does not guarantee a place — we will contact you with confirmed details and next steps, InShaaAllah.
         </div>
+      </section>
 
-        <div class="form-group">
-          <label for="phone">Phone Number</label>
-          <input type="tel" id="phone" name="Phone" placeholder="07xxx xxx xxx" required>
-        </div>
+      <section class="qa-panel">
+        <h2>Register your interest</h2>
+        <p>Takes less than a minute. Fields marked required are needed so we can get back to you.</p>
 
-        <div class="form-group">
-          <label for="age">Age Range</label>
-          <select id="age" name="Age Range" required>
-            <option value="" disabled selected>Select your age range</option>
-            <option>18–25</option>
-            <option>26–35</option>
-            <option>36–50</option>
-            <option>50+</option>
-          </select>
-        </div>
+        <form class="qa-form" id="alimSignupForm" name="alim-course-signup" method="POST" data-netlify="true">
+          <input type="hidden" name="form-name" value="alim-course-signup">
 
-        <div class="form-group">
-          <label for="experience">Prior Islamic Study</label>
-          <select id="experience" name="Prior Islamic Study">
-            <option value="" disabled selected>Select one (optional)</option>
-            <option>Complete beginner</option>
-            <option>Some study (e.g. madrasah as a child)</option>
-            <option>Studied Arabic or Islamic sciences before</option>
-          </select>
-        </div>
+          <label>Full name
+            <input type="text" name="fullName" maxlength="100" autocomplete="name" required>
+          </label>
 
-        <div class="form-group">
-          <label for="availability">Preferred Class Time</label>
-          <select id="availability" name="Preferred Class Time" required>
-            <option value="" disabled selected>Select your preference</option>
-            <option>Weekday evenings</option>
-            <option>Weekends</option>
-            <option>Either works for me</option>
-          </select>
-        </div>
+          <label>Email address
+            <input type="email" name="email" maxlength="200" autocomplete="email" required>
+          </label>
 
-        <div class="form-group">
-          <label for="notes">Anything else we should know?</label>
-          <textarea id="notes" name="Notes" rows="4" placeholder="Optional"></textarea>
-        </div>
+          <label>Phone number
+            <input type="tel" name="phone" maxlength="40" autocomplete="tel" required>
+          </label>
 
-        <button type="submit" class="btn-donate form-btn">Sign Up</button>
-        <p id="form-success" style="display:none;color:var(--green-bright);margin-top:10px;text-align:center">JazakAllahu khayran! Your registration has been received — we'll be in touch soon, InShaaAllah.</p>
-        <p id="form-error" style="display:none;color:#ff4a4a;margin-top:10px;text-align:center">Something went wrong. Please try again or email us directly.</p>
-      </form>
+          <label>Age group
+            <select name="ageGroup" required>
+              <option value="">Select an age group</option>
+              <option value="18-25">18–25</option>
+              <option value="26-35">26–35</option>
+              <option value="36-50">36–50</option>
+              <option value="50-plus">50 or over</option>
+            </select>
+          </label>
+
+          <label>Prior Islamic study <span style="font-weight:400;opacity:.75">(optional)</span>
+            <select name="priorStudy">
+              <option value="">Select an option</option>
+              <option value="beginner">Complete beginner</option>
+              <option value="some">Some study (e.g. madrasah as a child)</option>
+              <option value="experienced">Studied Arabic or Islamic sciences before</option>
+            </select>
+          </label>
+
+          <label>Preferred class time
+            <select name="preferredTime" required>
+              <option value="">Select your preference</option>
+              <option value="weekday-evenings">Weekday evenings</option>
+              <option value="weekends">Weekends</option>
+              <option value="either">Either works for me</option>
+            </select>
+          </label>
+
+          <label>Anything else we should know? <span style="font-weight:400;opacity:.75">(optional)</span>
+            <textarea name="notes" maxlength="1000" placeholder="e.g. current commitments, specific topics you'd like covered..."></textarea>
+          </label>
+
+          <label class="qa-checkbox">
+            <input type="checkbox" name="consent" required>
+            <span>I confirm that these details may be used by YMC to review my registration and contact me about the course.</span>
+          </label>
+
+          <label class="visually-hidden">Website
+            <input type="text" name="website" tabindex="-1" autocomplete="off">
+          </label>
+
+          <button class="btn-donate" type="submit">Sign Up</button>
+          <p class="qa-result" data-form-result aria-live="polite"></p>
+        </form>
+      </section>
+
     </div>
+  </main>
 
-  </div>
-</section>
+  <footer class="footer"></footer>
 
-<footer class="footer"></footer>
-<script src="/script.js"></script>
-<script>
-  // Netlify AJAX submission — same pattern as the contact form in script.js
-  (function () {
-    const form = document.getElementById("signupForm");
-    if (!form) return;
+  <script src="/script.js"></script>
+  <script>
+    // Netlify AJAX submission — same UX pattern as initContactForm in script.js
+    (function () {
+      const form = document.getElementById("alimSignupForm");
+      if (!form) return;
 
-    form.addEventListener("submit", async (event) => {
-      event.preventDefault();
+      const result = form.querySelector("[data-form-result]");
 
-      const button = form.querySelector('button[type="submit"]');
-      const success = document.getElementById("form-success");
-      const error = document.getElementById("form-error");
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
 
-      button.textContent = "Submitting...";
-      button.disabled = true;
-
-      try {
-        const body = new URLSearchParams(new FormData(form)).toString();
-        const response = await fetch("/", {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body
-        });
-
-        if (response.ok) {
-          success.style.display = "block";
-          error.style.display = "none";
+        // Honeypot: silently pretend to succeed if a bot filled the hidden field
+        if (form.elements.website.value) {
           form.reset();
-        } else {
-          error.style.display = "block";
-          success.style.display = "none";
+          return;
         }
-      } catch {
-        error.style.display = "block";
-        success.style.display = "none";
-      } finally {
-        button.textContent = "Sign Up";
-        button.disabled = false;
-      }
-    });
-  })();
-</script>
+
+        const button = form.querySelector('button[type="submit"]');
+        button.textContent = "Submitting...";
+        button.disabled = true;
+        result.textContent = "";
+        result.style.color = "";
+
+        try {
+          const body = new URLSearchParams(new FormData(form)).toString();
+          const response = await fetch("/", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body
+          });
+
+          if (response.ok) {
+            result.textContent = "JazakAllahu khayran! Your registration has been received — we'll be in touch soon, InShaaAllah.";
+            result.style.color = "var(--green-bright)";
+            form.reset();
+          } else {
+            result.textContent = "Something went wrong. Please try again or email us directly.";
+            result.style.color = "#ff4a4a";
+          }
+        } catch {
+          result.textContent = "Something went wrong. Please try again or email us directly.";
+          result.style.color = "#ff4a4a";
+        } finally {
+          button.textContent = "Sign Up";
+          button.disabled = false;
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
