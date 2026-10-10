@@ -211,7 +211,36 @@ async function renderTodayEvents() {
   }
 }
 
+function initWelcomeSlider() {
+  const slider = document.querySelector("[data-about-slider]");
+  if (!slider) return;
+
+  const slides = [...slider.querySelectorAll("[data-about-slide]")];
+  const dots = [...slider.querySelectorAll("[data-slide-to]")];
+  let activeIndex = 0;
+
+  function showSlide(index) {
+    activeIndex = (index + slides.length) % slides.length;
+    slides.forEach((slide, slideIndex) => {
+      const active = slideIndex === activeIndex;
+      slide.classList.toggle("is-active", active);
+      slide.setAttribute("aria-hidden", String(!active));
+      slide.inert = !active;
+    });
+    dots.forEach((dot, dotIndex) => dot.setAttribute("aria-pressed", String(dotIndex === activeIndex)));
+  }
+
+  slider.querySelector("[data-slider-previous]")?.addEventListener("click", () => showSlide(activeIndex - 1));
+  slider.querySelector("[data-slider-next]")?.addEventListener("click", () => showSlide(activeIndex + 1));
+  dots.forEach((dot, index) => dot.addEventListener("click", () => showSlide(index)));
+  slider.addEventListener("keydown", event => {
+    if (event.key === "ArrowLeft") showSlide(activeIndex - 1);
+    if (event.key === "ArrowRight") showSlide(activeIndex + 1);
+  });
+}
+
 function initHome() {
+  initWelcomeSlider();
   renderReminder();
   renderTodayEvents();
 }
