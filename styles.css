@@ -269,16 +269,6 @@ body {
 }
 .about-slider-slide.is-active { opacity: 1; visibility: visible; }
 .about-slider-slide img { width: 100%; height: 100%; display: block; object-fit: cover; }
-.about-slider-slide::after {
-  position: absolute;
-  inset: 0;
-  content: "";
-  background: linear-gradient(180deg, rgba(5, 12, 20, .06) 25%, rgba(5, 12, 20, .9) 100%);
-}
-.about-slider-caption { position: absolute; z-index: 1; left: 28px; right: 90px; bottom: 28px; color: #fff; }
-.about-slider-caption span { color: var(--gold-bright); font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
-.about-slider-caption h3 { margin: 8px 0; font-family: var(--font-serif); font-size: clamp(24px, 3vw, 34px); font-weight: 400; }
-.about-slider-caption p { margin: 0; max-width: 440px; color: rgba(255,255,255,.82); font-size: 14px; }
 .about-slider-arrow {
   position: absolute;
   z-index: 2;
