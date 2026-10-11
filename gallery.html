@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery | Yardley Muslim Centre</title>
+  <meta name="description" content="View photos of the spaces and facilities at Yardley Muslim Centre in Yardley, Birmingham.">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicons/main/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicons/main/favicon-32x32.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <nav class="navbar"></nav>
+  <section class="page-header">
+    <div class="container">
+      <h1>Gallery</h1>
+      <p>A look around Yardley Muslim Centre</p>
+    </div>
+  </section>
+  <main>
+    <section class="section">
+      <div class="container">
+        <p class="gallery-intro">Explore the building and some of the spaces visitors use. Select a photo to view it larger.</p>
+        <div class="gallery-grid">
+          <article class="gallery-card"><button class="gallery-image-button" type="button" data-gallery-open data-full="/assets/images/entrance-close_up.JPG" data-caption="The entrance to Yardley Muslim Centre" aria-label="View the entrance to Yardley Muslim Centre"><img src="/assets/images/entrance-close_up.JPG" alt="Entrance to Yardley Muslim Centre" loading="eager" decoding="async"></button><p class="gallery-caption">Welcome to YMC</p></article>
+          <article class="gallery-card"><button class="gallery-image-button" type="button" data-gallery-open data-full="/assets/images/mens_front-day.JPG" data-caption="Yardley Muslim Centre viewed from the front in daylight" aria-label="View the centre from the front in daylight"><img src="/assets/images/mens_front-day.JPG" alt="Front of Yardley Muslim Centre in daylight" loading="lazy" decoding="async"></button><p class="gallery-caption">The centre by day</p></article>
+          <article class="gallery-card"><button class="gallery-image-button" type="button" data-gallery-open data-full="/assets/images/car_park-wide.JPG" data-caption="The car park and grounds at Yardley Muslim Centre" aria-label="View the centre car park and grounds"><img src="/assets/images/car_park-wide.JPG" alt="Car park and grounds at Yardley Muslim Centre" loading="lazy" decoding="async"></button><p class="gallery-caption">Grounds and parking</p></article>
+          <article class="gallery-card"><button class="gallery-image-button" type="button" data-gallery-open data-full="/assets/images/mens_back-day.JPG" data-caption="Yardley Muslim Centre viewed from the rear in daylight" aria-label="View the centre from the rear"><img src="/assets/images/mens_back-day.JPG" alt="Rear view of Yardley Muslim Centre in daylight" loading="lazy" decoding="async"></button><p class="gallery-caption">A view from the rear</p></article>
+          <article class="gallery-card"><button class="gallery-image-button" type="button" data-gallery-open data-full="/assets/images/rear_park.JPG" data-caption="The grounds beside Yardley Muslim Centre" aria-label="View the grounds beside the centre"><img src="/assets/images/rear_park.JPG" alt="Grounds beside Yardley Muslim Centre" loading="lazy" decoding="async"></button><p class="gallery-caption">Around the building</p></article>
+          <article class="gallery-card"><button class="gallery-image-button" type="button" data-gallery-open data-full="/assets/images/mens_front-night.JPG" data-caption="Yardley Muslim Centre illuminated at night" aria-label="View the centre illuminated at night"><img src="/assets/images/mens_front-night.JPG" alt="Yardley Muslim Centre illuminated at night" loading="lazy" decoding="async"></button><p class="gallery-caption">The centre after dark</p></article>
+          <article class="gallery-card"><button class="gallery-image-button" type="button" data-gallery-open data-full="/assets/images/mimbar-night.JPG" data-caption="An interior prayer space at Yardley Muslim Centre" aria-label="View an interior prayer space"><img src="/assets/images/mimbar-night.JPG" alt="Interior prayer space at Yardley Muslim Centre" loading="lazy" decoding="async"></button><p class="gallery-caption">Inside the centre</p></article>
+          <article class="gallery-card"><button class="gallery-image-button" type="button" data-gallery-open data-full="/assets/images/mens-full.JPG" data-caption="A wider view of Yardley Muslim Centre" aria-label="View a wider exterior view of the centre"><img src="/assets/images/mens-full.JPG" alt="Wider exterior view of Yardley Muslim Centre" loading="lazy" decoding="async"></button><p class="gallery-caption">A wider view</p></article>
+        </div>
+      </div>
+    </section>
+  </main>
+  <dialog class="gallery-lightbox" aria-label="Enlarged gallery photo">
+    <button class="gallery-lightbox-close" type="button" data-gallery-close>Close <span aria-hidden="true">×</span></button>
+    <figure><img data-gallery-large alt=""><figcaption data-gallery-caption></figcaption></figure>
+  </dialog>
+  <footer class="footer"></footer>
+  <script src="/script.js"></script>
+  <script src="/gallery.js"></script>
+</body>
+</html>
