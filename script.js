@@ -14,7 +14,6 @@ const NAV_ITEMS = [
   ["/events.html", "Events", "events"],
   ["/resources/", "Resources", "resources"],
   ["/youth/", "Youth", "youth"],
-  ["/about/gallery.html", "Gallery", "gallery"],
   ["/about/", "About", "about"]
 ];
 
