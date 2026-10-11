@@ -890,7 +890,6 @@ iframe { border: 2px; }
     animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;
   }
-  .hero-video { display: none; }
   .service-link-card,
   .service-card-arrow,
   .service-link-card::before { transition: none; }
