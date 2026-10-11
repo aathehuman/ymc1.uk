@@ -19,6 +19,8 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
+dialog { position: fixed; inset: 0; margin: auto; max-height: calc(100dvh - 2rem); overflow: auto; }
+
 body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
@@ -1643,10 +1645,16 @@ select:focus-visible {
 .gallery-image-button:hover img { transform: scale(1.035); }
 .gallery-image-button:focus-visible { outline-offset: -4px; }
 .gallery-caption { padding: 14px 16px 16px; color: var(--text-primary); font-size: 14px; font-weight: 600; }
-dialog.gallery-lightbox { width: min(94vw, 1200px); max-width: none; max-height: 94vh; padding: 12px; border: 1px solid var(--border); border-radius: 14px; background: #091017; color: var(--text-primary); }
+dialog.gallery-lightbox { position: fixed; inset: 0; margin: auto; overflow: auto; width: min(94vw, 1200px); max-width: none; max-height: 94vh; padding: 12px; border: 1px solid var(--border); border-radius: 14px; background: #091017; color: var(--text-primary); }
 dialog.gallery-lightbox::backdrop { background: rgba(0, 0, 0, .84); }
 .gallery-lightbox figure { margin: 0; text-align: center; }
 .gallery-lightbox img { display: block; max-width: 100%; max-height: calc(90vh - 64px); margin: 0 auto; object-fit: contain; }
 .gallery-lightbox figcaption { padding: 12px 4px 2px; color: var(--text-secondary); }
 .gallery-lightbox-close { display: block; margin: 0 0 10px auto; padding: 7px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card); color: var(--text-primary); cursor: pointer; }
 @media (prefers-reduced-motion: reduce) { .gallery-image-button img { transition: none; } }
+
+
+/* Separate the key spaces from the rest of the gallery. */
+.gallery-section + .gallery-section { margin-top: 64px; }
+.gallery-section .section-title { margin-bottom: 8px; }
+.gallery-section .gallery-intro { margin-bottom: 28px; }
