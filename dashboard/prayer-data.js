@@ -1,4 +1,4 @@
-export const PRAYER_DATA = [
+const PRAYER_DATA = [
   // October 2026
   { date: "2026-10-01", Fajr: "05:33", FajrJamaat: "06:15", Sunrise: "07:08", Dhuhr: "12:57", DhuhrJamaat: "13:30", Asr: "16:49", AsrJamaat: "17:30", Maghrib: "18:49", MaghribJamaat: "18:49", Isha: "20:06", IshaJamaat: "20:30" },
   { date: "2026-10-02", Fajr: "05:35", FajrJamaat: "06:30", Sunrise: "07:10", Dhuhr: "12:57", DhuhrJamaat: "13:30", Asr: "16:47", AsrJamaat: "17:00", Maghrib: "18:47", MaghribJamaat: "18:47", Isha: "20:04", IshaJamaat: "20:15" },
@@ -63,3 +63,5 @@ export const PRAYER_DATA = [
   { date: "2026-11-29", Fajr: "06:12", FajrJamaat: "07:00", Sunrise: "07:54", Dhuhr: "11:56", DhuhrJamaat: "13:00", Asr: "14:12", AsrJamaat: "15:00", Maghrib: "16:02", MaghribJamaat: "16:02", Isha: "17:36", IshaJamaat: "19:20" },
   { date: "2026-11-30", Fajr: "06:13", FajrJamaat: "07:00", Sunrise: "07:55", Dhuhr: "11:56", DhuhrJamaat: "13:00", Asr: "14:11", AsrJamaat: "15:00", Maghrib: "16:01", MaghribJamaat: "16:01", Isha: "17:35", IshaJamaat: "19:20" }
 ];
+
+window.PRAYER_DATA = PRAYER_DATA;
