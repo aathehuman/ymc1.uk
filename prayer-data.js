@@ -1,5 +1,6 @@
 export const PRAYER_DATA = [
-{ date: "2026-10-01", Fajr: "05:33", FajrJamaat: "06:15", Sunrise: "07:08", Dhuhr: "12:57", DhuhrJamaat: "13:30", Asr: "16:49", AsrJamaat: "17:30", Maghrib: "18:49", MaghribJamaat: "18:49", Isha: "20:06", IshaJamaat: "20:30" },
+  // October 2026
+  { date: "2026-10-01", Fajr: "05:33", FajrJamaat: "06:15", Sunrise: "07:08", Dhuhr: "12:57", DhuhrJamaat: "13:30", Asr: "16:49", AsrJamaat: "17:30", Maghrib: "18:49", MaghribJamaat: "18:49", Isha: "20:06", IshaJamaat: "20:30" },
   { date: "2026-10-02", Fajr: "05:35", FajrJamaat: "06:30", Sunrise: "07:10", Dhuhr: "12:57", DhuhrJamaat: "13:30", Asr: "16:47", AsrJamaat: "17:00", Maghrib: "18:47", MaghribJamaat: "18:47", Isha: "20:04", IshaJamaat: "20:15" },
   { date: "2026-10-03", Fajr: "05:36", FajrJamaat: "06:30", Sunrise: "07:12", Dhuhr: "12:56", DhuhrJamaat: "13:30", Asr: "16:45", AsrJamaat: "17:00", Maghrib: "18:45", MaghribJamaat: "18:45", Isha: "20:02", IshaJamaat: "20:15" },
   { date: "2026-10-04", Fajr: "05:38", FajrJamaat: "06:30", Sunrise: "07:13", Dhuhr: "12:56", DhuhrJamaat: "13:30", Asr: "16:43", AsrJamaat: "17:00", Maghrib: "18:43", MaghribJamaat: "18:43", Isha: "20:00", IshaJamaat: "20:15" },
@@ -30,6 +31,7 @@ export const PRAYER_DATA = [
   { date: "2026-10-29", Fajr: "05:20", FajrJamaat: "06:15", Sunrise: "06:58", Dhuhr: "11:51", DhuhrJamaat: "13:00", Asr: "14:53", AsrJamaat: "15:15", Maghrib: "16:45", MaghribJamaat: "16:45", Isha: "18:14", IshaJamaat: "19:20" },
   { date: "2026-10-30", Fajr: "05:22", FajrJamaat: "06:15", Sunrise: "07:00", Dhuhr: "11:51", DhuhrJamaat: "13:00", Asr: "14:52", AsrJamaat: "15:15", Maghrib: "16:44", MaghribJamaat: "16:44", Isha: "18:12", IshaJamaat: "19:20" },
   { date: "2026-10-31", Fajr: "05:23", FajrJamaat: "06:15", Sunrise: "07:01", Dhuhr: "11:51", DhuhrJamaat: "13:00", Asr: "14:51", AsrJamaat: "15:15", Maghrib: "16:43", MaghribJamaat: "16:43", Isha: "18:10", IshaJamaat: "19:20" },
+  // November 2026
   { date: "2026-11-01", Fajr: "05:25", FajrJamaat: "06:15", Sunrise: "07:03", Dhuhr: "11:51", DhuhrJamaat: "13:00", Asr: "14:49", AsrJamaat: "15:00", Maghrib: "16:41", MaghribJamaat: "16:41", Isha: "18:08", IshaJamaat: "19:20" },
   { date: "2026-11-02", Fajr: "05:27", FajrJamaat: "06:15", Sunrise: "07:05", Dhuhr: "11:51", DhuhrJamaat: "13:00", Asr: "14:47", AsrJamaat: "15:00", Maghrib: "16:40", MaghribJamaat: "16:40", Isha: "18:07", IshaJamaat: "19:20" },
   { date: "2026-11-03", Fajr: "05:29", FajrJamaat: "06:15", Sunrise: "07:09", Dhuhr: "11:51", DhuhrJamaat: "13:00", Asr: "14:46", AsrJamaat: "15:00", Maghrib: "16:38", MaghribJamaat: "16:38", Isha: "18:05", IshaJamaat: "19:20" },
