@@ -123,7 +123,7 @@ function renderSharedLayout() {
       <div class="footer-col"><h3><a class="home-link" href="/">Yardley Muslim Centre</a></h3><p class="footer-tagline">Building Faith, Strengthening Community, Inspiring Futures.</p><div class="social-links"><a href="https://www.facebook.com/YardleyMuslimCentre/" target="_blank" rel="noopener noreferrer" aria-label="YMC on Facebook"><i class="fab fa-facebook-f"></i></a><a href="https://youtube.com/@TaqwaChannel-UK/" target="_blank" rel="noopener noreferrer" aria-label="YMC on YouTube"><i class="fa-brands fa-youtube"></i></a></div></div>
       <div class="footer-col"><h4>Quick Links</h4><ul class="footer-links"><li><a href="/prayer.html">Prayer Times</a></li><li><a href="/services/">Services</a></li><li><a href="/events.html">Events</a></li><li><a href="/resources/">Resources</a></li><li><a href="/youth/">Youth</a></li><li><a href="/about/gallery.html">Gallery</a></li><li><a href="/about/">About</a></li></ul></div>
       <div class="footer-col"><h4>Contact Us</h4><p><a href="https://maps.app.goo.gl/7oWLcudyF6aHySRFA" class="footer-link">47-51 Stoney Lane<br>Birmingham, B25 8RE</a></p><p><a href="tel:+447846252413" class="footer-link">07846 252 413</a> / <a href="tel:+447588475739" class="footer-link">07588 475 739</a></p><p><a href="mailto:info@ymc1.uk" class="footer-link">info@ymc1.uk</a></p></div>
-      <div class="footer-col footer-donate-col"><h4>Support Us</h4><p>Your donations keep the mosque running.</p><a href="/donate.html" class="btn-donate">Donate Now</a></div>
+      <div class="footer-col footer-donate-col"><h4>Support Us</h4><p>Your donations support the centre’s educational programmes and community services.</p><a href="/donate.html" class="btn-donate">Donate Now</a></div>
     </div><div class="footer-bottom"><p>&copy; <span id="year"></span> Yardley Muslim Centre. All rights reserved.</p><p>Website by <a href="https://abdul-aziz.co.uk/">aa-infinitech</a></p></div></footer>`;
   }
 }
@@ -142,7 +142,7 @@ function initNavbar() {
 
 function ensureOpenGraph() {
   const descriptions = {
-    index: "Yardley Muslim Centre — a local masjid and community centre serving Yardley, Birmingham.",
+    index: "Yardley Muslim Centre — an educational and community centre serving Yardley, Birmingham.",
     prayer: "Prayer times and jamaat times at Yardley Muslim Centre.",
     services: "Services at Yardley Muslim Centre.",
     events: "Upcoming events and regular programmes at Yardley Muslim Centre.",
@@ -239,7 +239,7 @@ function renderDailyPrayers() {
 
   if (!today) {
     if (dateEl) dateEl.textContent = "The current timetable has not been uploaded yet.";
-    grid.innerHTML = '<div class="prayer-unavailable"><i class="fa-regular fa-calendar-xmark"></i><div><strong>Prayer times temporarily unavailable</strong><span>Please check the full timetable or contact the mosque for today’s jamaat times.</span></div></div>';
+    grid.innerHTML = '<div class="prayer-unavailable"><i class="fa-regular fa-calendar-xmark"></i><div><strong>Prayer times temporarily unavailable</strong><span>Please check the full timetable or contact the centre for current timetable information.</span></div></div>';
     return;
   }
 
