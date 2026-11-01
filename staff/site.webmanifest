@@ -1,8 +1,8 @@
 {
   "name": "YMC Staff Portal",
   "short_name": "YMC Staff",
-  "start_url": "/staff/",
-  "scope": "/staff/",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#08111f",
   "theme_color": "#08111f",

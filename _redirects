@@ -1,3 +1,9 @@
+# Move the staff portal onto its own browser origin.
+https://ymc1.uk/staff https://staff.ymc1.uk/ 301!
+https://ymc1.uk/staff/ https://staff.ymc1.uk/ 301!
+https://ymc1.uk/staff/index.html https://staff.ymc1.uk/ 301!
+https://staff.ymc1.uk/ /staff/index.html 200!
+
 /campaign  https://planning.birmingham.gov.uk/NECSWS/ES/Presentation/Planning/OnlinePlanning/OnlinePlanningOverview?applicationNumber=2026%2F05032%2FPA&guid=58c8452f-3a6c-4a2d-b8ae-5a07fae8ea51  302
 /services.html  /services/  301
 /about.html  /about/  301

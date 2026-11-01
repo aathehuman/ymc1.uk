@@ -5,6 +5,7 @@ const TOPICS = {
   staff: "ymc-staff"
 };
 const SITE_ORIGIN = "https://ymc1.uk";
+const STAFF_ORIGIN = "https://staff.ymc1.uk";
 
 function parseBody(event) {
   try {
@@ -20,11 +21,15 @@ function cleanText(value, maxLength) {
   return String(value || "").trim().replace(/\s+/g, " ").slice(0, maxLength);
 }
 
-function safeLink(value) {
-  if (!value) return `${SITE_ORIGIN}/`;
-  const url = new URL(String(value), SITE_ORIGIN);
-  if (url.protocol !== "https:" || !["ymc1.uk", "www.ymc1.uk"].includes(url.hostname)) {
-    const error = new Error("Notification links must point to ymc1.uk.");
+function safeLink(value, audience) {
+  const baseOrigin = audience === "staff" ? STAFF_ORIGIN : SITE_ORIGIN;
+  if (!value) return `${baseOrigin}/`;
+  const url = new URL(String(value), baseOrigin);
+  const allowedHost = audience === "staff"
+    ? url.hostname === "staff.ymc1.uk"
+    : ["ymc1.uk", "www.ymc1.uk"].includes(url.hostname);
+  if (url.protocol !== "https:" || !allowedHost) {
+    const error = new Error("Notification links must use the matching YMC site.");
     error.statusCode = 400;
     throw error;
   }
@@ -41,7 +46,7 @@ export async function handler(event) {
     const message = cleanText(body.message, 240);
     const audience = String(body.audience || "public").trim().toLowerCase();
     const topic = TOPICS[audience];
-    const link = safeLink(body.link || (audience === "staff" ? "/staff/" : "/"));
+    const link = safeLink(body.link, audience);
 
     if (!topic) {
       const error = new Error("Notification audience must be public or staff.");
