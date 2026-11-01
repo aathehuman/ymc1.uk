@@ -4,7 +4,8 @@ import {
   deleteToken,
   getMessaging,
   getToken,
-  isSupported
+  isSupported,
+  onMessage
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-messaging.js";
 import { writeAuditLog } from "./audit.js";
 
@@ -100,6 +101,22 @@ function buildStaffSubscriptionCard() {
 async function initStaffSubscriptionCard() {
   ensureStaffManifest();
   if (!app || !("Notification" in window) || !("serviceWorker" in navigator) || !(await isSupported())) return;
+
+  const messaging = getMessaging(app);
+  onMessage(messaging, payload => {
+    const data = payload.data || {};
+    const notification = payload.notification || {};
+    const title = notification.title || data.title || "Yardley Muslim Centre";
+    const body = notification.body || data.body || "";
+    if (Notification.permission !== "granted" || !body) return;
+
+    getRegistration().then(registration => registration.showNotification(title, {
+      body,
+      icon: "/assets/favicons/staff/android-chrome-192x192.png",
+      badge: "/assets/favicons/staff/favicon-32x32.png",
+      data: { link: data.link || payload.fcmOptions?.link || "/" }
+    })).catch(error => console.warn("Could not display foreground notification:", error));
+  });
 
   const card = buildStaffSubscriptionCard();
   if (!card) return;

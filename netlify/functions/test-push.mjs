@@ -19,7 +19,7 @@ export async function handler(event) {
         type: "device-test",
         title: "YMC device test",
         body: "Direct push delivery to this device is working.",
-        link: "/staff/"
+        link: "/"
       }
     });
 
