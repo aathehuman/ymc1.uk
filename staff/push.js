@@ -231,7 +231,7 @@ function buildPushCard() {
   const linkField = form.elements.namedItem("link");
 
   audienceField.addEventListener("change", () => {
-    linkField.value = audienceField.value === "staff" ? "/staff/" : "/";
+    linkField.value = "/";
   });
 
   form.addEventListener("submit", async event => {
