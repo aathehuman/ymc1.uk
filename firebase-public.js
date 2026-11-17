@@ -366,6 +366,7 @@ function initialiseQuestionForm() {
 
 async function init() {
   if (!isFirebaseConfigured() || !db) {
+    renderAnnouncements();
     setStatus("Live content is not connected yet. The normal website remains available.", "setup");
     return;
   }
