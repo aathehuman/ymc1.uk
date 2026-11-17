@@ -113,13 +113,29 @@ function safeLink(link, url, label) {
 
 async function renderAnnouncements() {
   const host = document.querySelector("[data-firebase-announcements]");
-  if (!host || !db) return;
+  if (!host) return;
 
-  const snapshot = await getDocs(query(
-    collection(db, "announcements"),
-    where("active", "==", true),
-    limit(20)
-  ));
+  host.hidden = false;
+  host.setAttribute("aria-live", "polite");
+  host.replaceChildren(textElement("p", "firebase-empty", "Loading announcements…"));
+
+  if (!db) {
+    host.replaceChildren(textElement("p", "firebase-empty", "Announcements are unavailable right now."));
+    return;
+  }
+
+  let snapshot;
+  try {
+    snapshot = await getDocs(query(
+      collection(db, "announcements"),
+      where("active", "==", true),
+      limit(20)
+    ));
+  } catch (error) {
+    console.error("Announcements could not be loaded:", error);
+    host.replaceChildren(textElement("p", "firebase-empty", "Announcements could not be loaded. Please try again later."));
+    return;
+  }
 
   const now = Date.now();
   const items = snapshot.docs
@@ -127,10 +143,12 @@ async function renderAnnouncements() {
     .filter(item => !item.expiresAt || toMillis(item.expiresAt) >= now)
     .sort((a, b) => (b.priority || 0) - (a.priority || 0));
 
-  if (!items.length) return;
+  if (!items.length) {
+    host.replaceChildren(textElement("p", "firebase-empty", "Announcements will appear here when sent."));
+    return;
+  }
 
   host.replaceChildren();
-  host.hidden = false;
 
   items.forEach(item => {
     const notice = document.createElement("article");
